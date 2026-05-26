@@ -1,34 +1,71 @@
 @page "/restaurant/menu"
+
+@using Data.Restaurant.DTOs
 @using Domain.Restaurant.Interfaces
+
 @inject IMenuService MenuService
 
 <h3>Menu</h3>
 
-@if (items == null)
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">
+        @error
+    </div>
+}
+
+@if (items is null)
 {
     <p>Loading...</p>
 }
+else if (items.Count == 0)
+{
+    <p>No menu items found.</p>
+}
 else
 {
-    @foreach (var item in items)
-    {
-        <div>
-            <b>@item.Name</b> - @item.Price €
-            <button @onclick="() => Add(item.Id)">Add to order</button>
-        </div>
-    }
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.Price.ToString("0.00") €</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" href="/restaurant/order">
+                            Add to Order
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
-    List<MenuItemDto>? items;
+    private List<MenuItemDto>? items;
+
+    private string? error;
 
     protected override async Task OnInitializedAsync()
     {
-        items = await MenuService.GetMenuAsync();
-    }
-
-    void Add(Guid id)
-    {
-        // later Order logic
+        try
+        {
+            items = await MenuService.GetMenuItemsAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
     }
 }
