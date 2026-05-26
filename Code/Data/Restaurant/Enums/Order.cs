@@ -11,7 +11,7 @@ public class Order
     public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
     public Guid CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    //public Customer? Customer { get; set; }
 
     public List<OrderItem> Items { get; set; } = new();
 }
