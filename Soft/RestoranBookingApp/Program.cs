@@ -14,6 +14,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<ITableService, TableService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
