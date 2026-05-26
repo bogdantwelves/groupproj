@@ -14,6 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
