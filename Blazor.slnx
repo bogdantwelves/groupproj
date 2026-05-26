@@ -8,23 +8,17 @@
     <Project Path="Code/Shared/Shared.csproj" />
   </Folder>
   <Folder Name="/Soft/" />
-  <Folder Name="/Soft/App/" />
-  <Folder Name="/Soft/Maui/" />
-  <Folder Name="/Soft/Blazor/">
-    <Project Path="Soft/Blazor/Client/Blazor.Client.csproj" />
-    <Project Path="Soft/Blazor/Server/Blazor.csproj" />
-  </Folder>
-  <Folder Name="/Soft/Todo/">
-    <Project Path="Soft/Todo/Client/Todo.Client.csproj" />
-    <Project Path="Soft/Todo/Server/Todo.csproj" />
+  <Folder Name="/Soft/App/">
+    <Project Path="Soft/App/App.csproj" />
   </Folder>
   <Folder Name="/Soft/Movie/">
     <Project Path="Soft/Movie/Client/Movie.Client.csproj" />
     <Project Path="Soft/Movie/Server/Movie.csproj" />
   </Folder>
-  <Folder Name="/Soft/Web/" />
   <Folder Name="/Tests/">
     <Project Path="Tests/Aids/Aids.csproj" />
     <Project Path="Tests/Data/Data.csproj" />
+    <Project Path="Tests/Infra/Infra.csproj" />
+    <Project Path="Tests/Shared/Shared.csproj" Id="230ebd22-91b7-4930-9d1c-44690e9a7488" />
   </Folder>
 </Solution>

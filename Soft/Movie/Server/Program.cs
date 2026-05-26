@@ -1,10 +1,11 @@
+
+using Abc.Infra;
+using Abc.Soft.Web;
+using Abc.Soft.Web.Components.Account;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Abc.Soft.Web.Client.Pages;
-using Abc.Soft.Web.Components;
-using Abc.Soft.Web.Components.Account;
-using Abc.Soft.Web.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlite(connectionString));
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
+builder.Services.ConfigureHttpJsonOptions(o =>
+    o.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.UseSqlite(connectionString));
 
@@ -49,8 +52,19 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddScoped<IMoviesRepo, MoviesRepo>();
+builder.Services.AddScoped<ICountriesRepo, CountriesRepo>();
+builder.Services.AddScoped<ICurrenciesRepo, CurrenciesRepo>();
+builder.Services.AddScoped<IMoneyRepo, MoneyRepo>();
+builder.Services.AddScoped<ICountryCurrenciesRepo, CountryCurrenciesRepo>();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var sp = scope.ServiceProvider;
+var db = sp.GetRequiredService<ApplicationDbContext>();
+await new SeedDb(db, 100).Seed();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -74,7 +88,15 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Abc.Soft.Web.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(
+        typeof(Abc.Soft.Web.Client._Imports).Assembly,
+        typeof(Abc.Shared.Pages.Home).Assembly);
+
+app.MapCountriesApi();
+app.MapMoviesApi();
+app.MapCurrenciesApi();
+app.MapMoneyApi();
+app.MapCountryCurrenciesApi();
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();

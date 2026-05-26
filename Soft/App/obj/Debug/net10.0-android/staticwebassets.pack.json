@@ -1,0 +1,53 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/bogdantwelve/.nuget/packages/microsoft.aspnetcore.components.webview/10.0.0/staticwebassets/blazor.modules.json",
+      "PackagePath": "staticwebassets/_framework/blazor.modules.json"
+    },
+    {
+      "Id": "/Users/bogdantwelve/.nuget/packages/microsoft.aspnetcore.components.webview/10.0.0/staticwebassets/blazor.webview.js",
+      "PackagePath": "staticwebassets/_framework/blazor.webview.js"
+    },
+    {
+      "Id": "/Users/bogdantwelve/Documents/groupproj/Soft/App/obj/Debug/net10.0-android/scopedcss/bundle/Abc.Soft.App.styles.css",
+      "PackagePath": "staticwebassets/Abc.Soft.App.styles.css"
+    },
+    {
+      "Id": "/Users/bogdantwelve/Documents/groupproj/Soft/App/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/Users/bogdantwelve/Documents/groupproj/Soft/App/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "/Users/bogdantwelve/Documents/groupproj/Soft/App/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/bogdantwelve/Documents/groupproj/Soft/App/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css.map"
+    },
+    {
+      "Id": "obj/Debug/net10.0-android/staticwebassets/msbuild.Abc.Soft.App.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-android/staticwebassets/msbuild.Abc.Soft.App.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-android/staticwebassets/msbuild.build.Abc.Soft.App.props",
+      "PackagePath": "build\\Abc.Soft.App.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-android/staticwebassets/msbuild.buildMultiTargeting.Abc.Soft.App.props",
+      "PackagePath": "buildMultiTargeting\\Abc.Soft.App.props"
+    },
+    {
+      "Id": "obj/Debug/net10.0-android/staticwebassets/msbuild.buildTransitive.Abc.Soft.App.props",
+      "PackagePath": "buildTransitive\\Abc.Soft.App.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

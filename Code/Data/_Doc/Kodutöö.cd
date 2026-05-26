@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Abc.Data.Currency">
+    <Position X="0.75" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAACAAAABIAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Currency.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Abc.Data.Movie">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <AssociationLine Name="Money" Type="Abc.Data.Money" FixedToPoint="true">
+      <Path>
+        <Point X="3.25" Y="1.188" />
+        <Point X="2.25" Y="1.188" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Country" Type="Abc.Data.Country" FixedToPoint="true">
+      <Path>
+        <Point X="4.75" Y="1.188" />
+        <Point X="5.75" Y="1.188" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAQAAAAAAAAIAAAQAAAIAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Movie.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Money" />
+      <Property Name="Country" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Abc.Data.Money">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Money.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Currency" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Abc.Data.CountryCurrency">
+    <Position X="5.75" Y="3.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAACAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CountryCurrency.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Currency" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Abc.Data.Country">
+    <Position X="5.75" Y="0.5" Width="1.75" />
+    <AssociationLine Name="Currencies" Type="Abc.Data.CountryCurrency" FixedFromPoint="true">
+      <Path>
+        <Point X="6.562" Y="2.88" />
+        <Point X="6.562" Y="3.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAQAAQAAEAAAAQAAAACAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Country.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Currencies" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="10" />
+</ClassDiagram>
