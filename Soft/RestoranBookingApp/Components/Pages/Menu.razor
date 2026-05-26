@@ -20,5 +20,15 @@ else
 }
 
 @code {
-    
+    List<MenuItemDto>? items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await MenuService.GetMenuAsync();
+    }
+
+    void Add(Guid id)
+    {
+        // later Order logic
+    }
 }
