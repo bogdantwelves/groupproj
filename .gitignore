@@ -5,5 +5,7 @@ obj/
 *.user
 *.suo
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
 .DS_Store
