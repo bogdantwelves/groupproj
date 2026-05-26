@@ -1,3 +1,5 @@
+using Data.Restaurant.Enums;
+
 namespace Data.Restaurant.Entities;
 
 public class Order
