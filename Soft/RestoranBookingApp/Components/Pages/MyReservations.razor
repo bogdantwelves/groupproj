@@ -1,6 +1,7 @@
 @page "/restaurant/my-reservations"
 
 @using Data.Restaurant.DTOs
+@using Data.Restaurant.Enums
 @using Domain.Restaurant.Interfaces
 
 @inject IBookingService BookingService
@@ -128,6 +129,6 @@ else if (reservations is not null)
 
     private static bool IsCancelDisabled(ReservationDto reservation)
     {
-        return reservation.Status.ToString() == "Cancelled";
+        return reservation.Status == ReservationStatus.Cancelled;
     }
 }
