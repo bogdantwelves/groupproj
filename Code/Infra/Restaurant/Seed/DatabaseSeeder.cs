@@ -10,6 +10,46 @@ public static class DatabaseSeeder
         // Person 1: Customers
         // Person 2: Menu and MenuItems
         // Person 3: Staff
+        if (await db.Staff.AnyAsync())
+        {
+            return;
+        }
+
+        var restaurant = await db.Restaurants.FirstOrDefaultAsync();
+
+        if (restaurant is null)
+        {
+            // Staff must belong to a restaurant.
+            // If restaurant seed data has not been added yet, we skip staff seeding.
+            return;
+        }
+
+        var staff = new List<Staff>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Admin User",
+                Role = StaffRole.Admin,
+                RestaurantId = restaurant.Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                FullName = "John Waiter",
+                Role = StaffRole.Waiter,
+                RestaurantId = restaurant.Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Maria Chef",
+                Role = StaffRole.Chef,
+                RestaurantId = restaurant.Id
+            }
+        };
+
+        db.Staff.AddRange(staff);
 
         await Task.CompletedTask;
     }
