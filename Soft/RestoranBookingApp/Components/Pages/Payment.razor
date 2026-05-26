@@ -1,0 +1,73 @@
+@page "/restaurant/payment"
+
+@using Data.Restaurant.DTOs
+@using Data.Restaurant.Enums
+@using Domain.Restaurant.Interfaces
+
+@inject IPaymentService PaymentService
+
+<h3>Payment</h3>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-info">
+        @message
+    </div>
+}
+
+<div class="mb-3">
+    <label class="form-label">Order Id</label>
+    <input class="form-control" @bind="orderIdText" />
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Payment Method</label>
+    <select class="form-control" @bind="selectedMethod">
+        <option value="@PaymentMethod.Cash">Cash</option>
+        <option value="@PaymentMethod.Card">Card</option>
+        <option value="@PaymentMethod.Online">Online</option>
+    </select>
+</div>
+
+<button class="btn btn-primary" @onclick="PayAsync">
+    Pay
+</button>
+
+@code {
+    private string orderIdText = string.Empty;
+
+    private PaymentMethod selectedMethod = PaymentMethod.Card;
+
+    private string? message;
+
+    private async Task PayAsync()
+    {
+        try
+        {
+            message = null;
+
+            if (!Guid.TryParse(orderIdText, out var orderId))
+            {
+                message = "Invalid Order Id.";
+                return;
+            }
+
+            var dto = new PaymentDto
+            {
+                OrderId = orderId,
+                Method = selectedMethod
+            };
+
+            await PaymentService.PayAsync(dto);
+
+            message = "Payment completed successfully.";
+
+            orderIdText = string.Empty;
+            selectedMethod = PaymentMethod.Card;
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+}

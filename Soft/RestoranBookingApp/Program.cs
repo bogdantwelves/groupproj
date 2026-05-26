@@ -16,10 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddScoped<IBookingService, BookingService>();
-builder.Services.AddScoped<IMenuService, MenuService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

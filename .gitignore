@@ -1,2 +1,9 @@
-*.pdp
-*.cache
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.db
+*.sqlite
+.DS_Store

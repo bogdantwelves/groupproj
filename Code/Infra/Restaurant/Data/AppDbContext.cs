@@ -21,7 +21,6 @@ public class AppDbContext : DbContext
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
     // Person 3: Payments and Admin
-    // These will be added when payments-admin is merged.
 
     // Person 4: Tables and Inventory
     public DbSet<Restaurant> Restaurants => Set<Restaurant>();
@@ -33,23 +32,6 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<MenuItem>()
-            .Property(x => x.Price)
-            .HasPrecision(18, 2);
-
-        modelBuilder.Entity<OrderItem>()
-            .Property(x => x.UnitPrice)
-            .HasPrecision(18, 2);
-
-        modelBuilder.Entity<Order>()
-            .Ignore(x => x.TotalAmount);
-
-        modelBuilder.Entity<Ingredient>()
-            .Property(x => x.Quantity)
-            .HasPrecision(18, 2);
-
-        modelBuilder.Entity<Ingredient>()
-            .Property(x => x.LowStockThreshold)
-            .HasPrecision(18, 2);
+        // Feature-specific configuration will be added here.
     }
 }
