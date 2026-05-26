@@ -1,5 +1,6 @@
 using Data.Restaurant.Entities;
 using Microsoft.EntityFrameworkCore;
+using RestaurantEntity = Data.Restaurant.Entities.Restaurant;
 
 namespace Infra.Restaurant.Data;
 
@@ -10,8 +11,7 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
-
+    public DbSet<RestaurantEntity> Restaurants => Set<RestaurantEntity>();
     public DbSet<RestaurantTable> Tables => Set<RestaurantTable>();
 
     public DbSet<Customer> Customers => Set<Customer>();
