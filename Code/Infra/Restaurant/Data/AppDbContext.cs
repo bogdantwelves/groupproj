@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
     // Person 2: Menu and Orders
 
     // Person 3: Payments and Admin
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<Staff> Staff => Set<Staff>();
 
     // Person 4: Tables and Inventory
 
