@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "/Users/bogdantwelve/.nuget/packages/": {}
+    "/Users/robertzadorozhny/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/bogdantwelve/Documents/groupproj/Code/Jobs/Jobs.csproj",
+      "projectUniqueName": "/Users/robertzadorozhny/ISA II/groupproj/Code/Jobs/Jobs.csproj",
       "projectName": "Jobs",
-      "projectPath": "/Users/bogdantwelve/Documents/groupproj/Code/Jobs/Jobs.csproj",
-      "packagesPath": "/Users/bogdantwelve/.nuget/packages/",
-      "outputPath": "/Users/bogdantwelve/Documents/groupproj/Code/Jobs/obj/",
+      "projectPath": "/Users/robertzadorozhny/ISA II/groupproj/Code/Jobs/Jobs.csproj",
+      "packagesPath": "/Users/robertzadorozhny/.nuget/packages/",
+      "outputPath": "/Users/robertzadorozhny/ISA II/groupproj/Code/Jobs/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/bogdantwelve/.nuget/NuGet/NuGet.Config"
+        "/Users/robertzadorozhny/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

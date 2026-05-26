@@ -1,0 +1,12 @@
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/bin/Debug/net10.0/Aids.deps.json
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/bin/Debug/net10.0/Aids.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/bin/Debug/net10.0/Aids.pdb
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.GeneratedMSBuildEditorConfig.editorconfig
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.AssemblyInfoInputs.cache
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.AssemblyInfo.cs
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.csproj.CoreCompileInputs.cache
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.sourcelink.json
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/refint/Aids.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/Aids.pdb
+/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/Debug/net10.0/ref/Aids.dll

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/bogdantwelve/Documents/groupproj/Code/Aids/Aids.csproj": {}
+    "/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/Aids.csproj": {}
   },
   "projects": {
-    "/Users/bogdantwelve/Documents/groupproj/Code/Aids/Aids.csproj": {
+    "/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/Aids.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/bogdantwelve/Documents/groupproj/Code/Aids/Aids.csproj",
+        "projectUniqueName": "/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/Aids.csproj",
         "projectName": "Aids",
-        "projectPath": "/Users/bogdantwelve/Documents/groupproj/Code/Aids/Aids.csproj",
-        "packagesPath": "/Users/bogdantwelve/.nuget/packages/",
-        "outputPath": "/Users/bogdantwelve/Documents/groupproj/Code/Aids/obj/",
+        "projectPath": "/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/Aids.csproj",
+        "packagesPath": "/Users/robertzadorozhny/.nuget/packages/",
+        "outputPath": "/Users/robertzadorozhny/ISA II/groupproj/Code/Aids/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/bogdantwelve/.nuget/NuGet/NuGet.Config"
+          "/Users/robertzadorozhny/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
