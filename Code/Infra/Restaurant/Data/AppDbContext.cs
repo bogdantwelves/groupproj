@@ -26,5 +26,12 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // Feature-specific configuration will be added here.
+        modelBuilder.Entity<MenuItem>()
+            .Property(x => x.Price)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<OrderItem>()
+            .Property(x => x.UnitPrice)
+            .HasPrecision(18, 2);
     }
 }
