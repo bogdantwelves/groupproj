@@ -28,7 +28,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Date and Time</label>
+        <label class="form-label">Date</label>
         <InputDate class="form-control" @bind-Value="reservationDate" />
     </div>
 
@@ -49,6 +49,7 @@
     };
 
     private string customerIdText = string.Empty;
+
     private string restaurantIdText = string.Empty;
 
     private DateTime reservationDate = DateTime.Today.AddDays(1);
