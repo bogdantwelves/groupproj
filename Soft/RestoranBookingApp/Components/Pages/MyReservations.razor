@@ -1,0 +1,133 @@
+@page "/restaurant/my-reservations"
+
+@using Data.Restaurant.DTOs
+@using Domain.Restaurant.Interfaces
+
+@inject IBookingService BookingService
+
+<h3>My Reservations</h3>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-info">
+        @message
+    </div>
+}
+
+<div class="mb-3">
+    <label class="form-label">Customer Id</label>
+    <input class="form-control" @bind="customerIdText" />
+</div>
+
+<button class="btn btn-primary mb-3" @onclick="LoadReservationsAsync">
+    Load Reservations
+</button>
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else if (reservations is not null && reservations.Count == 0)
+{
+    <p>No reservations found.</p>
+}
+else if (reservations is not null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>DateTime</th>
+                <th>Table Number</th>
+                <th>Party Size</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var reservation in reservations)
+            {
+                <tr>
+                    <td>@reservation.DateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @(reservation.TableNumber.HasValue
+                            ? reservation.TableNumber.Value.ToString()
+                            : "Not assigned")
+                    </td>
+                    <td>@reservation.PartySize</td>
+                    <td>@reservation.Status</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" disabled="@IsCancelDisabled(reservation)"
+                                @onclick="() => CancelReservationAsync(reservation.Id)">
+                            Cancel
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private string customerIdText = string.Empty;
+
+    private List<ReservationDto>? reservations;
+
+    private string? message;
+
+    private bool isLoading;
+
+    private async Task LoadReservationsAsync()
+    {
+        try
+        {
+            message = null;
+            isLoading = true;
+
+            if (!Guid.TryParse(customerIdText, out var customerId))
+            {
+                message = "Invalid Customer Id.";
+                reservations = null;
+                return;
+            }
+
+            reservations = await BookingService.GetReservationsByCustomerAsync(customerId);
+
+            if (reservations.Count == 0)
+            {
+                message = "No reservations found for this customer.";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task CancelReservationAsync(Guid reservationId)
+    {
+        try
+        {
+            message = null;
+
+            await BookingService.CancelReservationAsync(reservationId);
+
+            message = "Reservation cancelled successfully.";
+
+            await LoadReservationsAsync();
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private static bool IsCancelDisabled(ReservationDto reservation)
+    {
+        return reservation.Status.ToString() == "Cancelled";
+    }
+}

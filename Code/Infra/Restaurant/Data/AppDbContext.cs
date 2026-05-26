@@ -10,7 +10,8 @@ public class AppDbContext : DbContext
     }
 
     // Person 1: Reservations
-
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Reservation> Reservations => Set<Reservation>();
     // Person 2: Menu and Orders
 
     // Person 3: Payments and Admin
