@@ -1,0 +1,88 @@
+@page "/restaurant/admin"
+
+@using Data.Restaurant.DTOs
+@using Domain.Restaurant.Interfaces
+
+@inject IAdminDashboardService DashboardService
+
+<h3>Admin Dashboard</h3>
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">
+        @error
+    </div>
+}
+
+@if (isLoading)
+{
+    <p>Loading dashboard...</p>
+}
+else if (dashboard is not null)
+{
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Reservations</h5>
+                <p class="fs-4">@dashboard.ReservationCount</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Orders</h5>
+                <p class="fs-4">@dashboard.OrderCount</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Available Tables</h5>
+                <p class="fs-4">@dashboard.AvailableTables</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3">
+                <h5>Low Stock Ingredients</h5>
+                <p class="fs-4">@dashboard.LowStockIngredients</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-secondary mt-3" @onclick="LoadDashboardAsync">
+        Refresh
+    </button>
+}
+
+@code {
+    private AdminDashboardDto? dashboard;
+
+    private string? error;
+
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDashboardAsync();
+    }
+
+    private async Task LoadDashboardAsync()
+    {
+        try
+        {
+            error = null;
+            isLoading = true;
+
+            dashboard = await DashboardService.GetDashboardAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
