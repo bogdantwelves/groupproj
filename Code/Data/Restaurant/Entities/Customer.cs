@@ -11,4 +11,6 @@ public class Customer
     public string PhoneNumber { get; set; } = string.Empty;
 
     public List<Reservation> Reservations { get; set; } = new();
+
+    public List<Order> Orders { get; set; } = new();
 }
