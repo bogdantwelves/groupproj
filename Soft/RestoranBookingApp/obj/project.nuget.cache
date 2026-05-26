@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FP9gyfv9+Jc=",
+  "dgSpecHash": "fSr7bHPMw2I=",
   "success": true,
-  "projectFilePath": "/Users/bogdantwelve/Documents/groupproj/RestoranBookingApp/RestoranBookingApp.csproj",
+  "projectFilePath": "/Users/bogdantwelve/Documents/groupproj/Soft/RestoranBookingApp/RestoranBookingApp.csproj",
   "expectedPackageFiles": [
     "/Users/bogdantwelve/.nuget/packages/microsoft.aspnetcore.app.internal.assets/10.0.2/microsoft.aspnetcore.app.internal.assets.10.0.2.nupkg.sha512"
   ],
