@@ -1,7 +1,9 @@
-using Domain.Restaurant.Interfaces;
 using Data.Restaurant.DTOs;
+using Domain.Restaurant.Interfaces;
 using Infra.Restaurant.Data;
 using Microsoft.EntityFrameworkCore;
+
+namespace Infra.Restaurant.Services;
 
 public class MenuService : IMenuService
 {
@@ -12,13 +14,15 @@ public class MenuService : IMenuService
         _db = db;
     }
 
-    public async Task<List<MenuItemDto>> GetMenuAsync()
+    public async Task<List<MenuItemDto>> GetMenuItemsAsync()
     {
         return await _db.MenuItems
+            .OrderBy(x => x.Name)
             .Select(x => new MenuItemDto
             {
                 Id = x.Id,
                 Name = x.Name,
+                Description = x.Description,
                 Price = x.Price
             })
             .ToListAsync();
