@@ -19,9 +19,10 @@ public class AdminDashboardService : IAdminDashboardService
         return new AdminDashboardDto
         {
             ReservationCount = await _db.Reservations.CountAsync(),
-            OrderCount = 0,
-            AvailableTables = 0,
-            LowStockIngredients = 0
+            OrderCount = await _db.Orders.CountAsync(),
+            AvailableTables = await _db.Tables.CountAsync(x => x.IsAvailable),
+            LowStockIngredients = await _db.Ingredients
+                .CountAsync(x => x.Quantity <= x.LowStockThreshold)
         };
     }
 }
