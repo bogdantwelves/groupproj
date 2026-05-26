@@ -11,8 +11,11 @@ public class AppDbContext : DbContext
 
     // Person 1: Reservations
 
-    // Person 2: Menu and Orders
-
+    // Max
+    public DbSet<Menu> Menus => Set<Menu>();
+    public DbSet<MenuItem> MenuItems => Set<MenuItem>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     // Person 3: Payments and Admin
 
     // Person 4: Tables and Inventory
