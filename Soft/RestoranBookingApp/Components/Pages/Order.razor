@@ -1,0 +1,18 @@
+@page "/restaurant/order"
+@using Domain.Restaurant.Interfaces
+@inject IOrderService OrderService
+
+<h3>Create Order</h3>
+
+<button @onclick="Create">Submit Order</button>
+
+@code {
+    async Task Create()
+    {
+        await OrderService.CreateOrderAsync(new CreateOrderDto
+        {
+            CustomerId = Guid.NewGuid(),
+            Items = new()
+        });
+    }
+}

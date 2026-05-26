@@ -1,4 +1,9 @@
-# macOS
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.db
+*.sqlite
 .DS_Store
-**/.DS_Store
-
