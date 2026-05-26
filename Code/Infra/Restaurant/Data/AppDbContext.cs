@@ -1,3 +1,4 @@
+using Data.Restaurant.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Restaurant.Data;
