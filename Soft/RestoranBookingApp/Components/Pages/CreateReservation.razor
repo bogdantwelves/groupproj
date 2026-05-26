@@ -1,0 +1,96 @@
+@page "/restaurant/create-reservation"
+
+@using Data.Restaurant.DTOs
+@using Domain.Restaurant.Interfaces
+
+@inject IBookingService BookingService
+
+<h3>Create Reservation</h3>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-info">
+        @message
+    </div>
+}
+
+<EditForm Model="model" OnValidSubmit="SubmitAsync">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Customer Id</label>
+        <InputText class="form-control" @bind-Value="customerIdText" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Restaurant Id</label>
+        <InputText class="form-control" @bind-Value="restaurantIdText" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Date and Time</label>
+        <InputDate class="form-control" @bind-Value="reservationDate" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Party Size</label>
+        <InputNumber class="form-control" @bind-Value="model.PartySize" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+        Submit
+    </button>
+</EditForm>
+
+@code {
+    private CreateReservationDto model = new()
+    {
+        PartySize = 2
+    };
+
+    private string customerIdText = string.Empty;
+    private string restaurantIdText = string.Empty;
+
+    private DateTime reservationDate = DateTime.Today.AddDays(1);
+
+    private string? message;
+
+    private async Task SubmitAsync()
+    {
+        try
+        {
+            if (!Guid.TryParse(customerIdText, out var customerId))
+            {
+                message = "Invalid Customer Id.";
+                return;
+            }
+
+            if (!Guid.TryParse(restaurantIdText, out var restaurantId))
+            {
+                message = "Invalid Restaurant Id.";
+                return;
+            }
+
+            model.CustomerId = customerId;
+            model.RestaurantId = restaurantId;
+            model.DateTime = reservationDate;
+
+            await BookingService.CreateReservationAsync(model);
+
+            message = "Reservation created successfully.";
+
+            model = new CreateReservationDto
+            {
+                PartySize = 2
+            };
+
+            customerIdText = string.Empty;
+            restaurantIdText = string.Empty;
+            reservationDate = DateTime.Today.AddDays(1);
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+}
