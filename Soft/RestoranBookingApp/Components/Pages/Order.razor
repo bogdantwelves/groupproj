@@ -1,18 +1,160 @@
 @page "/restaurant/order"
+
+@using Data.Restaurant.DTOs
 @using Domain.Restaurant.Interfaces
+
+@inject IMenuService MenuService
 @inject IOrderService OrderService
 
 <h3>Create Order</h3>
 
-<button @onclick="Create">Submit Order</button>
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-info">
+        @message
+    </div>
+}
+
+<div class="mb-3">
+    <label class="form-label">Customer Id</label>
+    <input class="form-control" @bind="customerIdText" />
+</div>
+
+@if (menuItems is null)
+{
+    <p>Loading menu...</p>
+}
+else if (menuItems.Count == 0)
+{
+    <p>No menu items found.</p>
+}
+else
+{
+    <h5>Menu Items</h5>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in menuItems)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("0.00") €</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" @onclick="() => AddItem(item)">
+                            Add
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5>Selected Items</h5>
+
+    @if (selectedItems.Count == 0)
+    {
+        <p>No items selected.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Menu Item Id</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in selectedItems)
+                {
+                    <tr>
+                        <td>@item.MenuItemId</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <button class="btn btn-success" @onclick="CreateOrderAsync">
+        Create Order
+    </button>
+}
 
 @code {
-    async Task Create()
+    private List<MenuItemDto>? menuItems;
+
+    private List<CreateOrderItemDto> selectedItems = new();
+
+    private string customerIdText = string.Empty;
+
+    private string? message;
+
+    protected override async Task OnInitializedAsync()
     {
-        await OrderService.CreateOrderAsync(new CreateOrderDto
+        try
         {
-            CustomerId = Guid.NewGuid(),
-            Items = new()
+            menuItems = await MenuService.GetMenuItemsAsync();
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private void AddItem(MenuItemDto item)
+    {
+        var existing = selectedItems.FirstOrDefault(x => x.MenuItemId == item.Id);
+
+        if (existing is not null)
+        {
+            existing.Quantity++;
+            return;
+        }
+
+        selectedItems.Add(new CreateOrderItemDto
+        {
+            MenuItemId = item.Id,
+            Quantity = 1
         });
+    }
+
+    private async Task CreateOrderAsync()
+    {
+        try
+        {
+            message = null;
+
+            if (!Guid.TryParse(customerIdText, out var customerId))
+            {
+                message = "Invalid Customer Id.";
+                return;
+            }
+
+            var dto = new CreateOrderDto
+            {
+                CustomerId = customerId,
+                Items = selectedItems
+            };
+
+            var orderId = await OrderService.CreateOrderAsync(dto);
+
+            message = $"Order created successfully. Order Id: {orderId}";
+
+            selectedItems.Clear();
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
     }
 }
