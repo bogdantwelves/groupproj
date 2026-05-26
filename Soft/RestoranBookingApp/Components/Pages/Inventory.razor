@@ -1,0 +1,65 @@
+@page "/restaurant/inventory"
+
+@using Data.Restaurant.DTOs
+@using Domain.Restaurant.Interfaces
+
+@inject IInventoryService InventoryService
+
+<h3>Inventory</h3>
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">
+        @error
+    </div>
+}
+
+@if (ingredients is null)
+{
+    <p>Loading...</p>
+}
+else if (ingredients.Count == 0)
+{
+    <p>No ingredients found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Low Stock Threshold</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var ingredient in ingredients)
+            {
+                <tr>
+                    <td>@ingredient.Name</td>
+                    <td>@ingredient.Quantity</td>
+                    <td>@ingredient.LowStockThreshold</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<IngredientDto>? ingredients;
+
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ingredients = await InventoryService.GetIngredientsAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}
