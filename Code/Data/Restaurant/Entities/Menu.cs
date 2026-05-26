@@ -6,4 +6,9 @@ public class Menu
 
     public string Name { get; set; } = string.Empty;
 
+    public Guid RestaurantId { get; set; }
+
+    public Restaurant? Restaurant { get; set; }
+
+    public List<MenuItem> Items { get; set; } = new();
 }
