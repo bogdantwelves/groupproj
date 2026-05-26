@@ -17,7 +17,10 @@ public class AppDbContext : DbContext
     // Person 3: Payments and Admin
 
     // Person 4: Tables and Inventory
-
+    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
+    public DbSet<RestaurantTable> Tables => Set<RestaurantTable>();
+    public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<Ingredient> Ingredients => Set<Ingredient>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
