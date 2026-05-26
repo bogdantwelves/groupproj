@@ -2,6 +2,7 @@ using RestoranBookingApp.Components;
 using Infra.Restaurant.Data;
 using Infra.Restaurant.Seed;
 using Microsoft.EntityFrameworkCore;
+using Domain.Restaurant.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 var app = builder.Build();
+
+builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 using (var scope = app.Services.CreateScope())
 {
