@@ -2,8 +2,9 @@ namespace Data.Restaurant.Enums;
 
 public enum OrderStatus
 {
-    Pending = 1,
-    InProgress = 2,
-    Completed = 3,
-    Cancelled = 4
+    Created = 1,
+    Preparing = 2,
+    Served = 3,
+    Cancelled = 4,
+    Paid = 5
 }
