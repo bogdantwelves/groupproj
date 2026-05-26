@@ -1,0 +1,24 @@
+@page "/restaurant/menu"
+@using Domain.Restaurant.Interfaces
+@inject IMenuService MenuService
+
+<h3>Menu</h3>
+
+@if (items == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    @foreach (var item in items)
+    {
+        <div>
+            <b>@item.Name</b> - @item.Price €
+            <button @onclick="() => Add(item.Id)">Add to order</button>
+        </div>
+    }
+}
+
+@code {
+    
+}
