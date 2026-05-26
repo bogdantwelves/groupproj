@@ -12,15 +12,15 @@ public class AppDbContext : DbContext
 
     // Person 1: Reservations
 
-    // Max
-    public DbSet<Menu> Menus => Set<Menu>();
-    public DbSet<MenuItem> MenuItems => Set<MenuItem>();
-    public DbSet<Order> Orders => Set<Order>();
-    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    // Person 2: Menu and Orders
+
     // Person 3: Payments and Admin
 
     // Person 4: Tables and Inventory
-
+    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
+    public DbSet<RestaurantTable> Tables => Set<RestaurantTable>();
+    public DbSet<Inventory> Inventories => Set<Inventory>();
+    public DbSet<Ingredient> Ingredients => Set<Ingredient>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
