@@ -1,0 +1,16 @@
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/bin/Debug/net10.0/Domain.deps.json
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/bin/Debug/net10.0/Domain.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/bin/Debug/net10.0/Domain.pdb
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/bin/Debug/net10.0/Data.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/bin/Debug/net10.0/Data.pdb
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.csproj.AssemblyReference.cache
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.AssemblyInfoInputs.cache
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.AssemblyInfo.cs
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.csproj.CoreCompileInputs.cache
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.sourcelink.json
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.csproj.Up2Date
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/refint/Domain.dll
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/Domain.pdb
+/Users/robertzadorozhny/ISA II/groupproj/Code/Domain/obj/Debug/net10.0/ref/Domain.dll

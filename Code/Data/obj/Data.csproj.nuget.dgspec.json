@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/bogdantwelve/Documents/groupproj/Code/Data/Data.csproj": {}
+    "/Users/robertzadorozhny/ISA II/groupproj/Code/Data/Data.csproj": {}
   },
   "projects": {
-    "/Users/bogdantwelve/Documents/groupproj/Code/Data/Data.csproj": {
+    "/Users/robertzadorozhny/ISA II/groupproj/Code/Data/Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/bogdantwelve/Documents/groupproj/Code/Data/Data.csproj",
+        "projectUniqueName": "/Users/robertzadorozhny/ISA II/groupproj/Code/Data/Data.csproj",
         "projectName": "Data",
-        "projectPath": "/Users/bogdantwelve/Documents/groupproj/Code/Data/Data.csproj",
-        "packagesPath": "/Users/bogdantwelve/.nuget/packages/",
-        "outputPath": "/Users/bogdantwelve/Documents/groupproj/Code/Data/obj/",
+        "projectPath": "/Users/robertzadorozhny/ISA II/groupproj/Code/Data/Data.csproj",
+        "packagesPath": "/Users/robertzadorozhny/.nuget/packages/",
+        "outputPath": "/Users/robertzadorozhny/ISA II/groupproj/Code/Data/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/bogdantwelve/.nuget/NuGet/NuGet.Config"
+          "/Users/robertzadorozhny/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
