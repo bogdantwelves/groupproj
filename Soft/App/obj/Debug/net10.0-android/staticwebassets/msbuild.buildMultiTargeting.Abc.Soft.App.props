@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/Abc.Soft.App.props" />
-</Project>
