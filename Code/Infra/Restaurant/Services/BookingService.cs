@@ -30,6 +30,24 @@ public class BookingService : IBookingService
         if (dto.DateTime <= DateTime.Now)
             throw new InvalidOperationException("Reservation date must be in the future.");
 
+        var customerExists = await _db.Customers.AnyAsync(x => x.Id == dto.CustomerId);
+
+        if (!customerExists)
+            throw new InvalidOperationException("Customer not found.");
+
+        var restaurantExists = await _db.Restaurants.AnyAsync(x => x.Id == dto.RestaurantId);
+
+        if (!restaurantExists)
+            throw new InvalidOperationException("Restaurant not found.");
+
+        var table = await _db.Tables
+            .Where(x =>
+                x.RestaurantId == dto.RestaurantId &&
+                x.IsAvailable &&
+                x.Capacity >= dto.PartySize)
+            .OrderBy(x => x.Capacity)
+            .FirstOrDefaultAsync();
+
         var reservation = new Reservation
         {
             Id = Guid.NewGuid(),
@@ -37,8 +55,12 @@ public class BookingService : IBookingService
             RestaurantId = dto.RestaurantId,
             DateTime = dto.DateTime,
             PartySize = dto.PartySize,
-            Status = ReservationStatus.Confirmed
+            Status = table is null ? ReservationStatus.Pending : ReservationStatus.Confirmed,
+            RestaurantTableId = table?.Id
         };
+
+        if (table is not null)
+            table.IsAvailable = false;
 
         _db.Reservations.Add(reservation);
 
@@ -73,6 +95,7 @@ public class BookingService : IBookingService
             throw new InvalidOperationException("Reservation is required.");
 
         var reservation = await _db.Reservations
+            .Include(x => x.RestaurantTable)
             .FirstOrDefaultAsync(x => x.Id == reservationId);
 
         if (reservation is null)
@@ -82,6 +105,9 @@ public class BookingService : IBookingService
             throw new InvalidOperationException("Reservation is already cancelled.");
 
         reservation.Status = ReservationStatus.Cancelled;
+
+        if (reservation.RestaurantTable is not null)
+            reservation.RestaurantTable.IsAvailable = true;
 
         await _db.SaveChangesAsync();
     }
