@@ -71,6 +71,7 @@ else
                     <th>Dish</th>
                     <th>Quantity</th>
                     <th class="text-end">Price</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -81,8 +82,18 @@ else
 
                     <tr>
                         <td>@(menuItem?.Name ?? item.MenuItemId.ToString())</td>
-                        <td>@item.Quantity</td>
+                        <td style="max-width: 120px;">
+                            <InputNumber class="form-control form-control-sm"
+                                         Value="item.Quantity"
+                                         ValueChanged="(int value) => UpdateQuantity(item.MenuItemId, value)"
+                                         ValueExpression="() => item.Quantity" />
+                        </td>
                         <td class="text-end">@((menuItem?.Price ?? 0m).ToString("0.00")) €</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => RemoveItem(item.MenuItemId)">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -146,6 +157,32 @@ else
             MenuItemId = item.Id,
             Quantity = 1
         });
+    }
+
+    private void UpdateQuantity(Guid menuItemId, int quantity)
+    {
+        var existing = selectedItems.FirstOrDefault(x => x.MenuItemId == menuItemId);
+
+        if (existing is null)
+            return;
+
+        if (quantity <= 0)
+        {
+            selectedItems.Remove(existing);
+            return;
+        }
+
+        existing.Quantity = quantity;
+    }
+
+    private void RemoveItem(Guid menuItemId)
+    {
+        var existing = selectedItems.FirstOrDefault(x => x.MenuItemId == menuItemId);
+
+        if (existing is null)
+            return;
+
+        selectedItems.Remove(existing);
     }
 
     private async Task CreateOrderAsync()
