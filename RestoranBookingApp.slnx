@@ -10,4 +10,7 @@
 	<Folder Name="/Soft/">
 		<Project Path="Soft/RestoranBookingApp/RestoranBookingApp.csproj" />
 	</Folder>
+	<Folder Name="/Test/">
+		<Project Path="Test/Test.csproj" />
+	</Folder>
 </Solution>
