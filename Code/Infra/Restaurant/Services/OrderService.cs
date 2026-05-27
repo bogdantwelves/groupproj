@@ -20,6 +20,17 @@ public class OrderService : IOrderService
         if (dto.CustomerId == Guid.Empty)
             throw new InvalidOperationException("Customer is required.");
 
+        var customerExists = await _db.Customers.AnyAsync(x => x.Id == dto.CustomerId);
+        if (!customerExists)
+            throw new InvalidOperationException("Customer not found.");
+
+        if (dto.ReservationId is not null)
+        {
+            var reservationExists = await _db.Reservations.AnyAsync(x => x.Id == dto.ReservationId);
+            if (!reservationExists)
+                throw new InvalidOperationException("Reservation not found.");
+        }
+
         if (!dto.Items.Any())
             throw new InvalidOperationException("Order must contain at least one item.");
 

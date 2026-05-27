@@ -17,22 +17,22 @@ public static class DatabaseSeeder
         var customer2Id = Guid.Parse("22222222-2222-2222-2222-222222222222");
         var customer3Id = Guid.Parse("22222222-2222-2222-2222-222222222223");
 
-        if (!await db.Restaurants.AnyAsync())
+        var existingRestaurant = await db.Restaurants
+            .FirstOrDefaultAsync(x => x.Id == restaurantId);
+
+        if (existingRestaurant is null)
         {
-            var restaurant = new RestaurantEntity
+            existingRestaurant = new RestaurantEntity
             {
                 Id = restaurantId,
                 Name = "Demo Restaurant",
                 Address = "Main Street 1"
             };
 
-            db.Restaurants.Add(restaurant);
+            db.Restaurants.Add(existingRestaurant);
 
             await db.SaveChangesAsync();
         }
-
-        var existingRestaurant = await db.Restaurants
-            .FirstAsync(x => x.Id == restaurantId);
 
         if (!await db.Tables.AnyAsync())
         {
@@ -85,35 +85,44 @@ public static class DatabaseSeeder
             await db.SaveChangesAsync();
         }
 
-        if (!await db.Customers.AnyAsync())
+        var customersToAdd = new List<Customer>();
+
+        if (!await db.Customers.AnyAsync(x => x.Id == customer1Id))
         {
-            var customers = new List<Customer>
+            customersToAdd.Add(new Customer
             {
-                new()
-                {
-                    Id = customer1Id,
-                    FullName = "Alice Brown",
-                    Email = "alice@test.com",
-                    PhoneNumber = "111111"
-                },
-                new()
-                {
-                    Id = customer2Id,
-                    FullName = "Bob Smith",
-                    Email = "bob@test.com",
-                    PhoneNumber = "222222"
-                },
-                new()
-                {
-                    Id = customer3Id,
-                    FullName = "Charlie Green",
-                    Email = "charlie@test.com",
-                    PhoneNumber = "333333"
-                }
-            };
+                Id = customer1Id,
+                FullName = "Alice Brown",
+                Email = "alice@test.com",
+                PhoneNumber = "111111"
+            });
+        }
 
-            db.Customers.AddRange(customers);
+        if (!await db.Customers.AnyAsync(x => x.Id == customer2Id))
+        {
+            customersToAdd.Add(new Customer
+            {
+                Id = customer2Id,
+                FullName = "Bob Smith",
+                Email = "bob@test.com",
+                PhoneNumber = "222222"
+            });
+        }
 
+        if (!await db.Customers.AnyAsync(x => x.Id == customer3Id))
+        {
+            customersToAdd.Add(new Customer
+            {
+                Id = customer3Id,
+                FullName = "Charlie Green",
+                Email = "charlie@test.com",
+                PhoneNumber = "333333"
+            });
+        }
+
+        if (customersToAdd.Count > 0)
+        {
+            db.Customers.AddRange(customersToAdd);
             await db.SaveChangesAsync();
         }
 
