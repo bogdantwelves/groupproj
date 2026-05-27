@@ -1,10 +1,12 @@
+using Data.Restaurant.Enums;
+
 namespace Data.Restaurant.DTOs;
 
-public class StaffDto
+public class UpdateStaffDto
 {
-    public Guid Id { get; set; }
     public string FullName { get; set; } = string.Empty;
+
+    public StaffRole Role { get; set; }
+
     public string ShiftHours { get; set; } = string.Empty;
-    public string Role { get; set; } = string.Empty;
-    public Guid RestaurantId { get; set; }
 }

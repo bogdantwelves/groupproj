@@ -8,6 +8,8 @@ public class Staff
 
     public string FullName { get; set; } = string.Empty;
 
+    public string ShiftHours { get; set; } = string.Empty;
+
     public StaffRole Role { get; set; }
 
     public Guid RestaurantId { get; set; }

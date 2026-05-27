@@ -1,6 +1,7 @@
 @page "/restaurant/staff"
 
 @using Data.Restaurant.DTOs
+@using Data.Restaurant.Enums
 @using Domain.Restaurant.Interfaces
 
 @inject IStaffService StaffService
@@ -28,15 +29,46 @@ else
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Shift Hours</th>
                 <th>Role</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var staff in staffList)
             {
                 <tr>
-                    <td>@staff.FullName</td>
-                    <td>@staff.Role</td>
+                    @if (editingStaffId == staff.Id)
+                    {
+                        <td>
+                            <input class="form-control" @bind="editModel.FullName" />
+                        </td>
+                        <td>
+                            <input class="form-control" @bind="editModel.ShiftHours" />
+                        </td>
+                        <td>
+                            <select class="form-select" @bind="editModel.Role">
+                                @foreach (var role in staffRoles)
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            </select>
+                        </td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-primary me-2" @onclick="SaveEditAsync">Save</button>
+                            <button class="btn btn-sm btn-secondary" @onclick="CancelEdit">Cancel</button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@staff.FullName</td>
+                        <td>@staff.ShiftHours</td>
+                        <td>@staff.Role</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => StartEdit(staff)">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteStaffAsync(staff.Id)">Delete</button>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
@@ -47,11 +79,79 @@ else
     private List<StaffDto>? staffList;
     private string? error;
 
+    private readonly StaffRole[] staffRoles = Enum.GetValues<StaffRole>();
+    private Guid? editingStaffId;
+    private UpdateStaffDto editModel = new();
+
     protected override async Task OnInitializedAsync()
+    {
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
     {
         try
         {
+            error = null;
             staffList = await StaffService.GetStaffAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    private void StartEdit(StaffDto staff)
+    {
+        error = null;
+        editingStaffId = staff.Id;
+
+        var role = StaffRole.Waiter;
+        _ = Enum.TryParse(staff.Role, out role);
+
+        editModel = new UpdateStaffDto
+        {
+            FullName = staff.FullName,
+            ShiftHours = staff.ShiftHours,
+            Role = role
+        };
+    }
+
+    private void CancelEdit()
+    {
+        editingStaffId = null;
+        editModel = new UpdateStaffDto();
+    }
+
+    private async Task SaveEditAsync()
+    {
+        if (editingStaffId is null)
+            return;
+
+        try
+        {
+            error = null;
+            await StaffService.UpdateStaffAsync(editingStaffId.Value, editModel);
+            CancelEdit();
+            await ReloadAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    private async Task DeleteStaffAsync(Guid staffId)
+    {
+        try
+        {
+            error = null;
+            await StaffService.DeleteStaffAsync(staffId);
+            if (editingStaffId == staffId)
+            {
+                CancelEdit();
+            }
+            await ReloadAsync();
         }
         catch (Exception ex)
         {

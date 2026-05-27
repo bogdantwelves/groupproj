@@ -134,6 +134,7 @@ public static class DatabaseSeeder
                 {
                     Id = Guid.NewGuid(),
                     FullName = "Admin User",
+                    ShiftHours = "09:00-17:00",
                     Role = StaffRole.Admin,
                     RestaurantId = existingRestaurant.Id
                 },
@@ -141,6 +142,7 @@ public static class DatabaseSeeder
                 {
                     Id = Guid.NewGuid(),
                     FullName = "John Waiter",
+                    ShiftHours = "10:00-18:00",
                     Role = StaffRole.Waiter,
                     RestaurantId = existingRestaurant.Id
                 },
@@ -148,6 +150,7 @@ public static class DatabaseSeeder
                 {
                     Id = Guid.NewGuid(),
                     FullName = "Maria Chef",
+                    ShiftHours = "12:00-20:00",
                     Role = StaffRole.Chef,
                     RestaurantId = existingRestaurant.Id
                 }

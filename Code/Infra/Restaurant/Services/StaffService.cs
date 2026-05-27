@@ -21,9 +21,50 @@ public class StaffService : IStaffService
             {
                 Id = s.Id,
                 FullName = s.FullName,
+                ShiftHours = s.ShiftHours,
                 Role = s.Role.ToString(),
                 RestaurantId = s.RestaurantId
             })
             .ToListAsync();
+    }
+
+    public async Task UpdateStaffAsync(Guid staffId, UpdateStaffDto dto)
+    {
+        if (staffId == Guid.Empty)
+            throw new InvalidOperationException("Staff member is required.");
+
+        var fullName = dto.FullName.Trim();
+        if (string.IsNullOrWhiteSpace(fullName))
+            throw new InvalidOperationException("Full name is required.");
+
+        var shiftHours = dto.ShiftHours.Trim();
+
+        var staff = await _context.Staff
+            .FirstOrDefaultAsync(x => x.Id == staffId);
+
+        if (staff is null)
+            throw new InvalidOperationException("Staff member not found.");
+
+        staff.FullName = fullName;
+        staff.Role = dto.Role;
+        staff.ShiftHours = shiftHours;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteStaffAsync(Guid staffId)
+    {
+        if (staffId == Guid.Empty)
+            throw new InvalidOperationException("Staff member is required.");
+
+        var staff = await _context.Staff
+            .FirstOrDefaultAsync(x => x.Id == staffId);
+
+        if (staff is null)
+            throw new InvalidOperationException("Staff member not found.");
+
+        _context.Staff.Remove(staff);
+
+        await _context.SaveChangesAsync();
     }
 }

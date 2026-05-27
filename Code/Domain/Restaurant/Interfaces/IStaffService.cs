@@ -7,4 +7,8 @@ namespace Domain.Restaurant.Interfaces;
 public interface IStaffService
 {
     Task<List<StaffDto>> GetStaffAsync();
+
+    Task UpdateStaffAsync(Guid staffId, UpdateStaffDto dto);
+
+    Task DeleteStaffAsync(Guid staffId);
 }
