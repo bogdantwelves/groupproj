@@ -1,25 +1,34 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class CreateReservationDtoTests : BaseTests<CreateReservationDto>
 {
-    [TestInitialize] 
+    private string customerName = string.Empty;
+    private string restaurantName = string.Empty;
+    private DateTime dateTime;
+    private int partySize;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.CustomerName = GetRandom.String();
-        obj.RestaurantName = GetRandom.String();
-        obj.DateTime = GetRandom.DateTime();
-        obj.PartySize = GetRandom.Int32();
+        customerName = GetRandom.String();
+        restaurantName = GetRandom.String();
+        dateTime = GetRandom.DateTime();
+        partySize = GetRandom.Int32();
+        obj.CustomerName = customerName;
+        obj.RestaurantName = restaurantName;
+        obj.DateTime = dateTime;
+        obj.PartySize = partySize;
     }
 
-    [TestMethod] public void CustomerNameTest() => areEqual(obj.CustomerName, obj.CustomerName);
-    [TestMethod] public void RestaurantNameTest() => areEqual(obj.RestaurantName, obj.RestaurantName);
-    [TestMethod] public void DateTimeTest() => areEqual(obj.DateTime, obj.DateTime);
-    [TestMethod] public void PartySizeTest() => areEqual(obj.PartySize, obj.PartySize);
+    [TestMethod] public void CustomerNameTest() => areEqual(customerName, obj.CustomerName);
+    [TestMethod] public void RestaurantNameTest() => areEqual(restaurantName, obj.RestaurantName);
+    [TestMethod] public void DateTimeTest() => areEqual(dateTime, obj.DateTime);
+    [TestMethod] public void PartySizeTest() => areEqual(partySize, obj.PartySize);
 }

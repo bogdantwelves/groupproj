@@ -1,23 +1,30 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Abc.Aids;
 using Data.Restaurant.DTOs;
 using Data.Restaurant.Enums;
-using Abc.Aids;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class UpdateStaffDtoTests : BaseTests<UpdateStaffDto>
 {
-    [TestInitialize] 
+    private string fullName = string.Empty;
+    private StaffRole role;
+    private string shiftHours = string.Empty;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.FullName = GetRandom.String();
-        obj.Role = (StaffRole)GetRandom.Int32();
-        obj.ShiftHours = GetRandom.String();
+        fullName = GetRandom.String();
+        role = StaffRole.Chef;
+        shiftHours = GetRandom.String();
+        obj.FullName = fullName;
+        obj.Role = role;
+        obj.ShiftHours = shiftHours;
     }
 
-    [TestMethod] public void FullNameTest() => areEqual(obj.FullName, obj.FullName);
-    [TestMethod] public void RoleTest() => areEqual(obj.Role, obj.Role);
-    [TestMethod] public void ShiftHoursTest() => areEqual(obj.ShiftHours, obj.ShiftHours);
+    [TestMethod] public void FullNameTest() => areEqual(fullName, obj.FullName);
+    [TestMethod] public void RoleTest() => areEqual(role, obj.Role);
+    [TestMethod] public void ShiftHoursTest() => areEqual(shiftHours, obj.ShiftHours);
 }

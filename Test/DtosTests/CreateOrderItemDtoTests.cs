@@ -1,21 +1,26 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class CreateOrderItemDtoTests : BaseTests<CreateOrderItemDto>
 {
-    [TestInitialize] 
+    private Guid menuItemId;
+    private int quantity;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.MenuItemId = Guid.NewGuid();
-        obj.Quantity = GetRandom.Int32();
+        menuItemId = Guid.NewGuid();
+        quantity = GetRandom.Int32();
+        obj.MenuItemId = menuItemId;
+        obj.Quantity = quantity;
     }
 
-    [TestMethod] public void MenuItemIdTest() => areEqual(obj.MenuItemId, obj.MenuItemId);
-    [TestMethod] public void QuantityTest() => areEqual(obj.Quantity, obj.Quantity);
+    [TestMethod] public void MenuItemIdTest() => areEqual(menuItemId, obj.MenuItemId);
+    [TestMethod] public void QuantityTest() => areEqual(quantity, obj.Quantity);
 }

@@ -1,7 +1,7 @@
 using System;
 using Abc.Aids;
 using Data.Restaurant.Entities;
-using Data.Restaurant.Tests.DTOs;
+using Data.Restaurant.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.Entities;

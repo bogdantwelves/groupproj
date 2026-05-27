@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Data.Restaurant.Entities;
-using Data.Restaurant.Tests.DTOs;
+using Data.Restaurant.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestaurantEntity = Data.Restaurant.Entities.Restaurant;
 

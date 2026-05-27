@@ -1,20 +1,25 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class CreateIngredientDtoTests : BaseTests<CreateIngredientDto>
 {
-    [TestInitialize] 
+    private string name = string.Empty;
+    private decimal quantity;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.Name = GetRandom.String();
-        obj.Quantity = GetRandom.Decimal();
+        name = GetRandom.String();
+        quantity = GetRandom.Decimal();
+        obj.Name = name;
+        obj.Quantity = quantity;
     }
 
-    [TestMethod] public void NameTest() => areEqual(obj.Name, obj.Name);
-    [TestMethod] public void QuantityTest() => areEqual(obj.Quantity, obj.Quantity);
+    [TestMethod] public void NameTest() => areEqual(name, obj.Name);
+    [TestMethod] public void QuantityTest() => areEqual(quantity, obj.Quantity);
 }

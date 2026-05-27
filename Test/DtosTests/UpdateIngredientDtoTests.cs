@@ -1,22 +1,29 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class UpdateIngredientDtoTests : BaseTests<UpdateIngredientDto>
 {
-    [TestInitialize] 
+    private string name = string.Empty;
+    private decimal quantity;
+    private decimal lowStockThreshold;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.Name = GetRandom.String();
-        obj.Quantity = GetRandom.Decimal();
-        obj.LowStockThreshold = GetRandom.Decimal();
+        name = GetRandom.String();
+        quantity = GetRandom.Decimal();
+        lowStockThreshold = GetRandom.Decimal();
+        obj.Name = name;
+        obj.Quantity = quantity;
+        obj.LowStockThreshold = lowStockThreshold;
     }
 
-    [TestMethod] public void NameTest() => areEqual(obj.Name, obj.Name);
-    [TestMethod] public void QuantityTest() => areEqual(obj.Quantity, obj.Quantity);
-    [TestMethod] public void LowStockThresholdTest() => areEqual(obj.LowStockThreshold, obj.LowStockThreshold);
+    [TestMethod] public void NameTest() => areEqual(name, obj.Name);
+    [TestMethod] public void QuantityTest() => areEqual(quantity, obj.Quantity);
+    [TestMethod] public void LowStockThresholdTest() => areEqual(lowStockThreshold, obj.LowStockThreshold);
 }

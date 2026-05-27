@@ -17,12 +17,4 @@ public class IStaffServiceTests : TestAids
     [TestMethod] public void CreateStaffAsyncTest() => areEqual(true, hasMethod("CreateStaffAsync"));
     [TestMethod] public void UpdateStaffAsyncTest() => areEqual(true, hasMethod("UpdateStaffAsync"));
     [TestMethod] public void DeleteStaffAsyncTest() => areEqual(true, hasMethod("DeleteStaffAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

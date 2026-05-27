@@ -17,12 +17,4 @@ public class IOrderServiceTests : TestAids
     [TestMethod] public void GetOrderTotalAsyncTest() => areEqual(true, hasMethod("GetOrderTotalAsync"));
     [TestMethod] public void GetOrderCountAsyncTest() => areEqual(true, hasMethod("GetOrderCountAsync"));
     [TestMethod] public void GetOrderHistoryAsyncTest() => areEqual(true, hasMethod("GetOrderHistoryAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

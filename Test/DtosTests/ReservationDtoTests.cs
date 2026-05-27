@@ -1,30 +1,43 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Abc.Aids;
 using Data.Restaurant.DTOs;
 using Data.Restaurant.Enums;
-using Abc.Aids;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class ReservationDtoTests : BaseTests<ReservationDto>
 {
-    [TestInitialize] 
+    private Guid id;
+    private string customerName = string.Empty;
+    private DateTime dateTime;
+    private int? tableNumber;
+    private int partySize;
+    private ReservationStatus status;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.Id = Guid.NewGuid();
-        obj.CustomerName = GetRandom.String();
-        obj.DateTime = GetRandom.DateTime();
-        obj.TableNumber = GetRandom.Int32();
-        obj.PartySize = GetRandom.Int32();
-        obj.Status = (ReservationStatus)GetRandom.Int32();
+        id = Guid.NewGuid();
+        customerName = GetRandom.String();
+        dateTime = GetRandom.DateTime();
+        tableNumber = GetRandom.Int32();
+        partySize = GetRandom.Int32();
+        status = ReservationStatus.Confirmed;
+        obj.Id = id;
+        obj.CustomerName = customerName;
+        obj.DateTime = dateTime;
+        obj.TableNumber = tableNumber;
+        obj.PartySize = partySize;
+        obj.Status = status;
     }
 
-    [TestMethod] public void IdTest() => areEqual(obj.Id, obj.Id);
-    [TestMethod] public void CustomerNameTest() => areEqual(obj.CustomerName, obj.CustomerName);
-    [TestMethod] public void DateTimeTest() => areEqual(obj.DateTime, obj.DateTime);
-    [TestMethod] public void TableNumberTest() => areEqual(obj.TableNumber, obj.TableNumber);
-    [TestMethod] public void PartySizeTest() => areEqual(obj.PartySize, obj.PartySize);
-    [TestMethod] public void StatusTest() => areEqual(obj.Status, obj.Status);
+    [TestMethod] public void IdTest() => areEqual(id, obj.Id);
+    [TestMethod] public void CustomerNameTest() => areEqual(customerName, obj.CustomerName);
+    [TestMethod] public void DateTimeTest() => areEqual(dateTime, obj.DateTime);
+    [TestMethod] public void TableNumberTest() => areEqual(tableNumber, obj.TableNumber);
+    [TestMethod] public void PartySizeTest() => areEqual(partySize, obj.PartySize);
+    [TestMethod] public void StatusTest() => areEqual(status, obj.Status);
 }

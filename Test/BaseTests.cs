@@ -1,23 +1,12 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace Data.Restaurant.Tests;
 
-namespace Data.Restaurant.Tests.DTOs;
-
-public abstract class BaseTests<T> where T : class, new()
+public abstract class BaseTests<T> : TestAids where T : class, new()
 {
     protected T obj = null!;
 
     public virtual void Initialize()
     {
+        type = typeof(T);
         obj = new T();
-    }
-
-    protected static void areEqual<TValue>(TValue expected, TValue actual)
-    {
-        Assert.AreEqual(expected, actual);
-    }
-
-    protected static void areSame(object? expected, object? actual)
-    {
-        Assert.AreSame(expected, actual);
     }
 }

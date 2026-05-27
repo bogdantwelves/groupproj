@@ -1,21 +1,26 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class UpdateReservationDtoTests : BaseTests<UpdateReservationDto>
 {
-    [TestInitialize] 
+    private string customerName = string.Empty;
+    private DateTime dateTime;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.CustomerName = GetRandom.String();
-        obj.DateTime = GetRandom.DateTime();
+        customerName = GetRandom.String();
+        dateTime = GetRandom.DateTime();
+        obj.CustomerName = customerName;
+        obj.DateTime = dateTime;
     }
 
-    [TestMethod] public void CustomerNameTest() => areEqual(obj.CustomerName, obj.CustomerName);
-    [TestMethod] public void DateTimeTest() => areEqual(obj.DateTime, obj.DateTime);
+    [TestMethod] public void CustomerNameTest() => areEqual(customerName, obj.CustomerName);
+    [TestMethod] public void DateTimeTest() => areEqual(dateTime, obj.DateTime);
 }

@@ -1,25 +1,34 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class TableDtoTests : BaseTests<TableDto>
 {
-    [TestInitialize] 
+    private Guid id;
+    private int tableNumber;
+    private int capacity;
+    private bool isAvailable;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.Id = Guid.NewGuid();
-        obj.TableNumber = GetRandom.Int32();
-        obj.Capacity = GetRandom.Int32();
-        obj.IsAvailable = true;
+        id = Guid.NewGuid();
+        tableNumber = GetRandom.Int32();
+        capacity = GetRandom.Int32();
+        isAvailable = GetRandom.Int32() % 2 == 0;
+        obj.Id = id;
+        obj.TableNumber = tableNumber;
+        obj.Capacity = capacity;
+        obj.IsAvailable = isAvailable;
     }
 
-    [TestMethod] public void IdTest() => areEqual(obj.Id, obj.Id);
-    [TestMethod] public void TableNumberTest() => areEqual(obj.TableNumber, obj.TableNumber);
-    [TestMethod] public void CapacityTest() => areEqual(obj.Capacity, obj.Capacity);
-    [TestMethod] public void IsAvailableTest() => areEqual(obj.IsAvailable, obj.IsAvailable);
+    [TestMethod] public void IdTest() => areEqual(id, obj.Id);
+    [TestMethod] public void TableNumberTest() => areEqual(tableNumber, obj.TableNumber);
+    [TestMethod] public void CapacityTest() => areEqual(capacity, obj.Capacity);
+    [TestMethod] public void IsAvailableTest() => areEqual(isAvailable, obj.IsAvailable);
 }

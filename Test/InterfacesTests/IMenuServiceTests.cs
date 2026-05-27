@@ -17,12 +17,4 @@ public class IMenuServiceTests : TestAids
     [TestMethod] public void AddMenuItemAsyncTest() => areEqual(true, hasMethod("AddMenuItemAsync"));
     [TestMethod] public void UpdateMenuItemAsyncTest() => areEqual(true, hasMethod("UpdateMenuItemAsync"));
     [TestMethod] public void DeleteMenuItemAsyncTest() => areEqual(true, hasMethod("DeleteMenuItemAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

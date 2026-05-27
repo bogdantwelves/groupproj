@@ -19,12 +19,4 @@ public class IBookingServiceTests : TestAids
     [TestMethod] public void UpdateReservationAsyncTest() => areEqual(true, hasMethod("UpdateReservationAsync"));
     [TestMethod] public void CancelReservationAsyncTest() => areEqual(true, hasMethod("CancelReservationAsync"));
     [TestMethod] public void DeleteReservationAsyncTest() => areEqual(true, hasMethod("DeleteReservationAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

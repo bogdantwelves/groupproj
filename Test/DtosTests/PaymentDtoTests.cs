@@ -1,22 +1,26 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Data.Restaurant.DTOs;
 using Data.Restaurant.Enums;
-using Abc.Aids;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class PaymentDtoTests : BaseTests<PaymentDto>
 {
-    [TestInitialize] 
+    private Guid orderId;
+    private PaymentMethod method;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.OrderId = Guid.NewGuid();
-        obj.Method = (PaymentMethod)GetRandom.Int32();
+        orderId = Guid.NewGuid();
+        method = PaymentMethod.Card;
+        obj.OrderId = orderId;
+        obj.Method = method;
     }
 
-    [TestMethod] public void OrderIdTest() => areEqual(obj.OrderId, obj.OrderId);
-    [TestMethod] public void MethodTest() => areEqual(obj.Method, obj.Method);
+    [TestMethod] public void OrderIdTest() => areEqual(orderId, obj.OrderId);
+    [TestMethod] public void MethodTest() => areEqual(method, obj.Method);
 }

@@ -17,12 +17,4 @@ public class IInventoryServiceTests : TestAids
     [TestMethod] public void AddIngredientAsyncTest() => areEqual(true, hasMethod("AddIngredientAsync"));
     [TestMethod] public void UpdateIngredientAsyncTest() => areEqual(true, hasMethod("UpdateIngredientAsync"));
     [TestMethod] public void DeleteIngredientAsyncTest() => areEqual(true, hasMethod("DeleteIngredientAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

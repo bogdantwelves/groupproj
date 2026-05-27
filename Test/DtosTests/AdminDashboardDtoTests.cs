@@ -1,24 +1,33 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class AdminDashboardDtoTests : BaseTests<AdminDashboardDto>
 {
-    [TestInitialize] 
+    private int reservationCount;
+    private int orderCount;
+    private int availableTables;
+    private int lowStockIngredients;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.ReservationCount = GetRandom.Int32();
-        obj.OrderCount = GetRandom.Int32();
-        obj.AvailableTables = GetRandom.Int32();
-        obj.LowStockIngredients = GetRandom.Int32();
+        reservationCount = GetRandom.Int32();
+        orderCount = GetRandom.Int32();
+        availableTables = GetRandom.Int32();
+        lowStockIngredients = GetRandom.Int32();
+        obj.ReservationCount = reservationCount;
+        obj.OrderCount = orderCount;
+        obj.AvailableTables = availableTables;
+        obj.LowStockIngredients = lowStockIngredients;
     }
 
-    [TestMethod] public void ReservationCountTest() => areEqual(obj.ReservationCount, obj.ReservationCount);
-    [TestMethod] public void OrderCountTest() => areEqual(obj.OrderCount, obj.OrderCount);
-    [TestMethod] public void AvailableTablesTest() => areEqual(obj.AvailableTables, obj.AvailableTables);
-    [TestMethod] public void LowStockIngredientsTest() => areEqual(obj.LowStockIngredients, obj.LowStockIngredients);
+    [TestMethod] public void ReservationCountTest() => areEqual(reservationCount, obj.ReservationCount);
+    [TestMethod] public void OrderCountTest() => areEqual(orderCount, obj.OrderCount);
+    [TestMethod] public void AvailableTablesTest() => areEqual(availableTables, obj.AvailableTables);
+    [TestMethod] public void LowStockIngredientsTest() => areEqual(lowStockIngredients, obj.LowStockIngredients);
 }

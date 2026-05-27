@@ -13,12 +13,4 @@ public class IAdminDashboardServiceTests : TestAids
     [TestMethod] public void NamespaceTest() => areEqual("Domain.Restaurant.Interfaces", type.Namespace);
     [TestMethod] public void MethodCountTest() => areEqual(1, type.GetMethods().Length);
     [TestMethod] public void GetDashboardAsyncTest() => areEqual(true, hasMethod("GetDashboardAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

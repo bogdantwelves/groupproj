@@ -1,24 +1,31 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class CreateOrderDtoTests : BaseTests<CreateOrderDto>
 {
-    [TestInitialize] 
+    private string customerName = string.Empty;
+    private Guid? reservationId;
+    private List<CreateOrderItemDto> items = new();
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.CustomerName = GetRandom.String();
-        obj.ReservationId = Guid.NewGuid();
-        obj.Items = new List<CreateOrderItemDto>();
+        customerName = GetRandom.String();
+        reservationId = Guid.NewGuid();
+        items = new List<CreateOrderItemDto> { new() };
+        obj.CustomerName = customerName;
+        obj.ReservationId = reservationId;
+        obj.Items = items;
     }
 
-    [TestMethod] public void CustomerNameTest() => areEqual(obj.CustomerName, obj.CustomerName);
-    [TestMethod] public void ReservationIdTest() => areEqual(obj.ReservationId, obj.ReservationId);
-    [TestMethod] public void ItemsTest() => areEqual(obj.Items, obj.Items);
+    [TestMethod] public void CustomerNameTest() => areEqual(customerName, obj.CustomerName);
+    [TestMethod] public void ReservationIdTest() => areEqual(reservationId, obj.ReservationId);
+    [TestMethod] public void ItemsTest() => areSame(items, obj.Items);
 }

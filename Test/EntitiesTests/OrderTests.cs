@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Abc.Aids;
 using Data.Restaurant.Entities;
 using Data.Restaurant.Enums;
-using Data.Restaurant.Tests.DTOs;
+using Data.Restaurant.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.Entities;

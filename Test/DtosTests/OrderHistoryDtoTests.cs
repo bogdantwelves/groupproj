@@ -1,29 +1,42 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Data.Restaurant.DTOs;
 using Abc.Aids;
+using Data.Restaurant.DTOs;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class OrderHistoryDtoTests : BaseTests<OrderHistoryDto>
 {
-    [TestInitialize] 
+    private Guid orderId;
+    private string customerName = string.Empty;
+    private decimal totalAmount;
+    private string paymentMethod = string.Empty;
+    private string paymentState = string.Empty;
+    private DateTime createdAt;
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.OrderId = Guid.NewGuid();
-        obj.CustomerName = GetRandom.String();
-        obj.TotalAmount = GetRandom.Decimal();
-        obj.PaymentMethod = GetRandom.String();
-        obj.PaymentState = GetRandom.String();
-        obj.CreatedAt = GetRandom.DateTime();
+        orderId = Guid.NewGuid();
+        customerName = GetRandom.String();
+        totalAmount = GetRandom.Decimal();
+        paymentMethod = GetRandom.String();
+        paymentState = GetRandom.String();
+        createdAt = GetRandom.DateTime();
+        obj.OrderId = orderId;
+        obj.CustomerName = customerName;
+        obj.TotalAmount = totalAmount;
+        obj.PaymentMethod = paymentMethod;
+        obj.PaymentState = paymentState;
+        obj.CreatedAt = createdAt;
     }
 
-    [TestMethod] public void OrderIdTest() => areEqual(obj.OrderId, obj.OrderId);
-    [TestMethod] public void CustomerNameTest() => areEqual(obj.CustomerName, obj.CustomerName);
-    [TestMethod] public void TotalAmountTest() => areEqual(obj.TotalAmount, obj.TotalAmount);
-    [TestMethod] public void PaymentMethodTest() => areEqual(obj.PaymentMethod, obj.PaymentMethod);
-    [TestMethod] public void PaymentStateTest() => areEqual(obj.PaymentState, obj.PaymentState);
-    [TestMethod] public void CreatedAtTest() => areEqual(obj.CreatedAt, obj.CreatedAt);
+    [TestMethod] public void OrderIdTest() => areEqual(orderId, obj.OrderId);
+    [TestMethod] public void CustomerNameTest() => areEqual(customerName, obj.CustomerName);
+    [TestMethod] public void TotalAmountTest() => areEqual(totalAmount, obj.TotalAmount);
+    [TestMethod] public void PaymentMethodTest() => areEqual(paymentMethod, obj.PaymentMethod);
+    [TestMethod] public void PaymentStateTest() => areEqual(paymentState, obj.PaymentState);
+    [TestMethod] public void CreatedAtTest() => areEqual(createdAt, obj.CreatedAt);
 }

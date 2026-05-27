@@ -13,12 +13,4 @@ public class ITableServiceTests : TestAids
     [TestMethod] public void NamespaceTest() => areEqual("Domain.Restaurant.Interfaces", type.Namespace);
     [TestMethod] public void MethodCountTest() => areEqual(1, type.GetMethods().Length);
     [TestMethod] public void GetTablesAsyncTest() => areEqual(true, hasMethod("GetTablesAsync"));
-
-    private bool hasMethod(string name)
-    {
-        var methods = type.GetMethods();
-        for (var i = 0; i < methods.Length; i++)
-            if (methods[i].Name == name) return true;
-        return false;
-    }
 }

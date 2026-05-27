@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Data.Restaurant.DTOs;
-using Abc.Aids;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Data.Restaurant.Tests.DTOs;
 
-[TestClass] 
+[TestClass]
 public class InventoryDtoTests : BaseTests<InventoryDto>
 {
-    [TestInitialize] 
+    private Guid id;
+    private List<IngredientDto> ingredients = new();
+
+    [TestInitialize]
     public override void Initialize()
     {
         base.Initialize();
-        obj.Id = Guid.NewGuid();
-        obj.Ingredients = new List<IngredientDto>();
+        id = Guid.NewGuid();
+        ingredients = new List<IngredientDto> { new() };
+        obj.Id = id;
+        obj.Ingredients = ingredients;
     }
 
-    [TestMethod] public void IdTest() => areEqual(obj.Id, obj.Id);
-    [TestMethod] public void IngredientsTest() => areEqual(obj.Ingredients, obj.Ingredients);
+    [TestMethod] public void IdTest() => areEqual(id, obj.Id);
+    [TestMethod] public void IngredientsTest() => areSame(ingredients, obj.Ingredients);
 }
