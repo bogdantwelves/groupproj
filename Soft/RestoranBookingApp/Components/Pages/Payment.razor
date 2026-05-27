@@ -45,7 +45,54 @@
     </div>
 }
 
+<h5 class="mt-4">Order History</h5>
+
+@if (!string.IsNullOrWhiteSpace(ordersError))
+{
+    <div class="alert alert-danger">
+        @ordersError
+    </div>
+}
+
+@if (orders is null)
+{
+    <p>Loading...</p>
+}
+else if (orders.Count == 0)
+{
+    <p>No orders found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.CustomerName</td>
+                    <td>@order.TotalAmount.ToString("0.00") €</td>
+                    <td>@order.PaymentMethod</td>
+                    <td>@order.PaymentState</td>
+                    <td>@order.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
 @code {
+    private List<OrderHistoryDto>? orders;
+    private string? ordersError;
+
     private string orderIdText = string.Empty;
 
     private string OrderIdText
@@ -70,6 +117,11 @@
     private bool isConfirmed;
     private Guid? confirmedOrderId;
     private decimal confirmedTotal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await OrderService.GetOrderHistoryAsync();
+    }
 
     private async Task ConfirmOrderAsync()
     {
@@ -114,6 +166,16 @@
             await PaymentService.PayAsync(dto);
 
             message = "Payment completed successfully.";
+
+            try
+            {
+                ordersError = null;
+                orders = await OrderService.GetOrderHistoryAsync();
+            }
+            catch (Exception ex)
+            {
+                ordersError = ex.InnerException?.Message ?? ex.Message;
+            }
 
             OrderIdText = string.Empty;
             selectedMethod = PaymentMethod.Card;
