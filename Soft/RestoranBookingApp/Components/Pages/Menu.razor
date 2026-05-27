@@ -7,12 +7,43 @@
 
 <h3>Menu</h3>
 
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-success">
+        @message
+    </div>
+}
+
 @if (!string.IsNullOrWhiteSpace(error))
 {
     <div class="alert alert-danger">
         @error
     </div>
 }
+
+<EditForm Model="newItem" OnValidSubmit="AddMenuItemAsync" class="mb-4">
+    <DataAnnotationsValidator />
+
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label">Name</label>
+            <InputText class="form-control" @bind-Value="newItem.Name" />
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Description</label>
+            <InputText class="form-control" @bind-Value="newItem.Description" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Price</label>
+            <InputNumber class="form-control" @bind-Value="newItem.Price" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit" disabled="@isSubmitting">
+                Add Dish
+            </button>
+        </div>
+    </div>
+</EditForm>
 
 @if (items is null)
 {
@@ -30,7 +61,7 @@ else
                 <th>Name</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -38,13 +69,58 @@ else
             @foreach (var item in items)
             {
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Description</td>
-                    <td>@item.Price.ToString("0.00") €</td>
                     <td>
-                        <a class="btn btn-sm btn-primary" href="/restaurant/order">
-                            Add to Order
-                        </a>
+                        @if (editingItemId == item.Id)
+                        {
+                            <InputText class="form-control" @bind-Value="editItem.Name" />
+                        }
+                        else
+                        {
+                            @item.Name
+                        }
+                    </td>
+                    <td>
+                        @if (editingItemId == item.Id)
+                        {
+                            <InputText class="form-control" @bind-Value="editItem.Description" />
+                        }
+                        else
+                        {
+                            @item.Description
+                        }
+                    </td>
+                    <td>
+                        @if (editingItemId == item.Id)
+                        {
+                            <InputNumber class="form-control" @bind-Value="editItem.Price" />
+                        }
+                        else
+                        {
+                            @item.Price.ToString("0.00") <text>€</text>
+                        }
+                    </td>
+                    <td>
+                        @if (editingItemId == item.Id)
+                        {
+                            <button class="btn btn-sm btn-success me-2" @onclick="SaveEditAsync" disabled="@isSubmitting">
+                                Save
+                            </button>
+                            <button class="btn btn-sm btn-secondary" @onclick="CancelEdit">
+                                Cancel
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => StartEdit(item)">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger me-2" @onclick="() => DeleteMenuItemAsync(item.Id)" disabled="@isSubmitting">
+                                Delete
+                            </button>
+                            <a class="btn btn-sm btn-primary" href="/restaurant/order">
+                                Add to Order
+                            </a>
+                        }
                     </td>
                 </tr>
             }
@@ -55,9 +131,120 @@ else
 @code {
     private List<MenuItemDto>? items;
 
+    private CreateMenuItemDto newItem = new();
+
+    private Guid? editingItemId;
+
+    private UpdateMenuItemDto editItem = new();
+
+    private bool isSubmitting;
+
+    private string? message;
+
     private string? error;
 
     protected override async Task OnInitializedAsync()
+    {
+        await LoadItemsAsync();
+    }
+
+    private async Task AddMenuItemAsync()
+    {
+        try
+        {
+            isSubmitting = true;
+            error = null;
+            message = null;
+
+            await MenuService.AddMenuItemAsync(newItem);
+            await LoadItemsAsync();
+
+            message = "Dish added successfully.";
+            newItem = new CreateMenuItemDto();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void StartEdit(MenuItemDto item)
+    {
+        error = null;
+        message = null;
+        editingItemId = item.Id;
+        editItem = new UpdateMenuItemDto
+        {
+            Name = item.Name,
+            Description = item.Description,
+            Price = item.Price
+        };
+    }
+
+    private void CancelEdit()
+    {
+        editingItemId = null;
+        editItem = new UpdateMenuItemDto();
+    }
+
+    private async Task SaveEditAsync()
+    {
+        if (editingItemId is null)
+            return;
+
+        try
+        {
+            isSubmitting = true;
+            error = null;
+            message = null;
+
+            await MenuService.UpdateMenuItemAsync(editingItemId.Value, editItem);
+            await LoadItemsAsync();
+
+            message = "Dish updated successfully.";
+            CancelEdit();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task DeleteMenuItemAsync(Guid menuItemId)
+    {
+        try
+        {
+            isSubmitting = true;
+            error = null;
+            message = null;
+
+            await MenuService.DeleteMenuItemAsync(menuItemId);
+            await LoadItemsAsync();
+
+            if (editingItemId == menuItemId)
+                CancelEdit();
+
+            message = "Dish deleted successfully.";
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task LoadItemsAsync()
     {
         try
         {
