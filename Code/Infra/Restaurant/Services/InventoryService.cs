@@ -66,4 +66,49 @@ public class InventoryService : IInventoryService
 
         await _db.SaveChangesAsync();
     }
+
+    public async Task UpdateIngredientAsync(Guid ingredientId, UpdateIngredientDto dto)
+    {
+        if (ingredientId == Guid.Empty)
+            throw new InvalidOperationException("Product is required.");
+
+        var name = dto.Name.Trim();
+
+        if (string.IsNullOrWhiteSpace(name))
+            throw new InvalidOperationException("Product name is required.");
+
+        if (dto.Quantity <= 0)
+            throw new InvalidOperationException("Quantity must be greater than zero.");
+
+        if (dto.LowStockThreshold < 0)
+            throw new InvalidOperationException("Low stock threshold cannot be negative.");
+
+        var ingredient = await _db.Ingredients
+            .FirstOrDefaultAsync(x => x.Id == ingredientId);
+
+        if (ingredient is null)
+            throw new InvalidOperationException("Product not found.");
+
+        ingredient.Name = name;
+        ingredient.Quantity = dto.Quantity;
+        ingredient.LowStockThreshold = dto.LowStockThreshold;
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteIngredientAsync(Guid ingredientId)
+    {
+        if (ingredientId == Guid.Empty)
+            throw new InvalidOperationException("Product is required.");
+
+        var ingredient = await _db.Ingredients
+            .FirstOrDefaultAsync(x => x.Id == ingredientId);
+
+        if (ingredient is null)
+            throw new InvalidOperationException("Product not found.");
+
+        _db.Ingredients.Remove(ingredient);
+
+        await _db.SaveChangesAsync();
+    }
 }

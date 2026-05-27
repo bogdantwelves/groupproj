@@ -59,6 +59,7 @@ else
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Low Stock Threshold</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
@@ -66,9 +67,44 @@ else
             @foreach (var ingredient in ingredients)
             {
                 <tr>
-                    <td>@ingredient.Name</td>
-                    <td>@ingredient.Quantity</td>
-                    <td>@ingredient.LowStockThreshold</td>
+                    @if (editingIngredientId == ingredient.Id)
+                    {
+                        <td>
+                            <InputText class="form-control" @bind-Value="editIngredient.Name" />
+                        </td>
+                        <td>
+                            <InputNumber class="form-control" @bind-Value="editIngredient.Quantity" />
+                        </td>
+                        <td>
+                            <InputNumber class="form-control" @bind-Value="editIngredient.LowStockThreshold" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@ingredient.Name</td>
+                        <td>@ingredient.Quantity</td>
+                        <td>@ingredient.LowStockThreshold</td>
+                    }
+                    <td>
+                        @if (editingIngredientId == ingredient.Id)
+                        {
+                            <button class="btn btn-sm btn-success me-2" @onclick="SaveEditAsync" disabled="@isSubmitting">
+                                Save
+                            </button>
+                            <button class="btn btn-sm btn-secondary" @onclick="CancelEdit">
+                                Cancel
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => StartEdit(ingredient)">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteIngredientAsync(ingredient.Id)" disabled="@isSubmitting">
+                                Delete
+                            </button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -79,6 +115,10 @@ else
     private List<IngredientDto>? ingredients;
 
     private CreateIngredientDto newIngredient = new();
+
+    private Guid? editingIngredientId;
+
+    private UpdateIngredientDto editIngredient = new();
 
     private bool isSubmitting;
 
@@ -104,6 +144,78 @@ else
 
             message = "Product added successfully.";
             newIngredient = new CreateIngredientDto();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void StartEdit(IngredientDto ingredient)
+    {
+        error = null;
+        message = null;
+        editingIngredientId = ingredient.Id;
+        editIngredient = new UpdateIngredientDto
+        {
+            Name = ingredient.Name,
+            Quantity = ingredient.Quantity,
+            LowStockThreshold = ingredient.LowStockThreshold
+        };
+    }
+
+    private void CancelEdit()
+    {
+        editingIngredientId = null;
+        editIngredient = new UpdateIngredientDto();
+    }
+
+    private async Task SaveEditAsync()
+    {
+        if (editingIngredientId is null)
+            return;
+
+        try
+        {
+            isSubmitting = true;
+            error = null;
+            message = null;
+
+            await InventoryService.UpdateIngredientAsync(editingIngredientId.Value, editIngredient);
+            await LoadIngredientsAsync();
+
+            message = "Product updated successfully.";
+            CancelEdit();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task DeleteIngredientAsync(Guid ingredientId)
+    {
+        try
+        {
+            isSubmitting = true;
+            error = null;
+            message = null;
+
+            await InventoryService.DeleteIngredientAsync(ingredientId);
+            await LoadIngredientsAsync();
+
+            if (editingIngredientId == ingredientId)
+                CancelEdit();
+
+            message = "Product deleted successfully.";
         }
         catch (Exception ex)
         {
