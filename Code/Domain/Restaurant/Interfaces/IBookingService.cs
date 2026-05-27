@@ -9,4 +9,6 @@ public interface IBookingService
     Task<List<ReservationDto>> GetReservationsByCustomerAsync(string customerName);
 
     Task CancelReservationAsync(Guid reservationId);
+
+    Task DeleteReservationAsync(Guid reservationId);
 }

@@ -127,11 +127,63 @@ public class BookingService : IBookingService
         if (reservation.Status == ReservationStatus.Cancelled)
             throw new InvalidOperationException("Reservation is already cancelled.");
 
-        reservation.Status = ReservationStatus.Cancelled;
+        var releasedTable = reservation.RestaurantTable;
 
-        if (reservation.RestaurantTable is not null)
-            reservation.RestaurantTable.IsAvailable = true;
+        reservation.Status = ReservationStatus.Cancelled;
+        reservation.RestaurantTableId = null;
+
+        if (releasedTable is not null)
+            await AssignReleasedTableAsync(releasedTable, reservation.RestaurantId, reservation.Id);
 
         await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteReservationAsync(Guid reservationId)
+    {
+        if (reservationId == Guid.Empty)
+            throw new InvalidOperationException("Reservation is required.");
+
+        var reservation = await _db.Reservations
+            .Include(x => x.RestaurantTable)
+            .FirstOrDefaultAsync(x => x.Id == reservationId);
+
+        if (reservation is null)
+            throw new InvalidOperationException("Reservation not found.");
+
+        var releasedTable = reservation.Status == ReservationStatus.Confirmed
+            ? reservation.RestaurantTable
+            : null;
+
+        var restaurantId = reservation.RestaurantId;
+
+        _db.Reservations.Remove(reservation);
+
+        if (releasedTable is not null)
+            await AssignReleasedTableAsync(releasedTable, restaurantId, reservation.Id);
+
+        await _db.SaveChangesAsync();
+    }
+
+    private async Task AssignReleasedTableAsync(RestaurantTable releasedTable, Guid restaurantId, Guid excludedReservationId)
+    {
+        var nextPendingReservation = await _db.Reservations
+            .Where(x =>
+                x.Id != excludedReservationId &&
+                x.RestaurantId == restaurantId &&
+                x.Status == ReservationStatus.Pending &&
+                x.PartySize <= releasedTable.Capacity &&
+                x.DateTime > DateTime.Now)
+            .OrderBy(x => x.DateTime)
+            .FirstOrDefaultAsync();
+
+        if (nextPendingReservation is not null)
+        {
+            nextPendingReservation.Status = ReservationStatus.Confirmed;
+            nextPendingReservation.RestaurantTableId = releasedTable.Id;
+            releasedTable.IsAvailable = false;
+            return;
+        }
+
+        releasedTable.IsAvailable = true;
     }
 }

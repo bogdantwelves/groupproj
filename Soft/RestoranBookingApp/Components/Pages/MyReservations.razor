@@ -58,10 +58,17 @@ else if (reservations is not null)
                     <td>@reservation.PartySize</td>
                     <td>@reservation.Status</td>
                     <td>
-                        <button class="btn btn-sm btn-danger" disabled="@IsCancelDisabled(reservation)"
-                                @onclick="() => CancelReservationAsync(reservation.Id)">
-                            Cancel
-                        </button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-danger" disabled="@IsCancelDisabled(reservation)"
+                                    @onclick="() => CancelReservationAsync(reservation.Id)">
+                                Cancel
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-danger"
+                                    @onclick="() => DeleteReservationAsync(reservation.Id)">
+                                Delete
+                            </button>
+                        </div>
                     </td>
                 </tr>
             }
@@ -111,6 +118,24 @@ else if (reservations is not null)
             await BookingService.CancelReservationAsync(reservationId);
 
             message = "Reservation cancelled successfully.";
+
+            await LoadReservationsAsync();
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private async Task DeleteReservationAsync(Guid reservationId)
+    {
+        try
+        {
+            message = null;
+
+            await BookingService.DeleteReservationAsync(reservationId);
+
+            message = "Reservation deleted successfully.";
 
             await LoadReservationsAsync();
         }
