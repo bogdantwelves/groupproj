@@ -6,6 +6,8 @@ public class ReservationDto
 {
     public Guid Id { get; set; }
 
+    public string CustomerName { get; set; } = string.Empty;
+
     public DateTime DateTime { get; set; }
 
     public int? TableNumber { get; set; }

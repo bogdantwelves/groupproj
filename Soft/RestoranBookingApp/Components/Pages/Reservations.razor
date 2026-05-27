@@ -1,0 +1,211 @@
+@page "/restaurant/reservations"
+
+@using Data.Restaurant.DTOs
+@using Data.Restaurant.Enums
+@using Domain.Restaurant.Interfaces
+
+@inject IBookingService BookingService
+
+<h3>All Reservations</h3>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-info">
+        @message
+    </div>
+}
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+else if (reservations is not null && reservations.Count == 0)
+{
+    <p>No reservations found.</p>
+}
+else if (reservations is not null)
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var reservation in reservations)
+            {
+                <tr>
+                    @if (editingReservationId == reservation.Id)
+                    {
+                        <td>
+                            <input class="form-control" @bind="editModel.CustomerName" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="date" @bind="editDate" @bind:format="yyyy-MM-dd" />
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" placeholder="HH:mm" @bind="editTimeText" />
+                        </td>
+                        <td>@reservation.Status</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-primary me-2" @onclick="SaveEditAsync">
+                                Save
+                            </button>
+                            <button class="btn btn-sm btn-secondary" @onclick="CancelEdit">
+                                Cancel
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@reservation.CustomerName</td>
+                        <td>@reservation.DateTime.ToString("yyyy-MM-dd")</td>
+                        <td>@reservation.DateTime.ToString("HH:mm")</td>
+                        <td>@reservation.Status</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => StartEdit(reservation)">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning me-2"
+                                    disabled="@IsCancelDisabled(reservation)"
+                                    @onclick="() => CancelReservationAsync(reservation.Id)">
+                                Cancel
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteReservationAsync(reservation.Id)">
+                                Delete
+                            </button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ReservationDto>? reservations;
+    private string? message;
+    private bool isLoading;
+    private Guid? editingReservationId;
+    private UpdateReservationDto editModel = new();
+    private DateTime editDate = DateTime.Today;
+    private string editTimeText = "19:00";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ReloadAsync();
+    }
+
+    private async Task ReloadAsync()
+    {
+        try
+        {
+            message = null;
+            isLoading = true;
+            reservations = await BookingService.GetAllReservationsAsync();
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void StartEdit(ReservationDto reservation)
+    {
+        message = null;
+        editingReservationId = reservation.Id;
+        editModel = new UpdateReservationDto
+        {
+            CustomerName = reservation.CustomerName,
+            DateTime = reservation.DateTime
+        };
+        editDate = reservation.DateTime.Date;
+        editTimeText = reservation.DateTime.ToString("HH:mm");
+    }
+
+    private void CancelEdit()
+    {
+        editingReservationId = null;
+        editModel = new UpdateReservationDto();
+        editDate = DateTime.Today;
+        editTimeText = "19:00";
+    }
+
+    private async Task SaveEditAsync()
+    {
+        if (editingReservationId is null)
+            return;
+
+        try
+        {
+            if (!TimeSpan.TryParse(editTimeText, out var reservationTime))
+            {
+                message = "Invalid reservation time.";
+                return;
+            }
+
+            message = null;
+            editModel.DateTime = editDate.Date.Add(reservationTime);
+
+            await BookingService.UpdateReservationAsync(editingReservationId.Value, editModel);
+
+            CancelEdit();
+            await ReloadAsync();
+            message = "Reservation updated successfully.";
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private async Task CancelReservationAsync(Guid reservationId)
+    {
+        try
+        {
+            message = null;
+            await BookingService.CancelReservationAsync(reservationId);
+            await ReloadAsync();
+            message = "Reservation cancelled successfully.";
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private async Task DeleteReservationAsync(Guid reservationId)
+    {
+        try
+        {
+            message = null;
+            await BookingService.DeleteReservationAsync(reservationId);
+
+            if (editingReservationId == reservationId)
+            {
+                CancelEdit();
+            }
+
+            await ReloadAsync();
+            message = "Reservation deleted successfully.";
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+        }
+    }
+
+    private static bool IsCancelDisabled(ReservationDto reservation)
+    {
+        return reservation.Status == ReservationStatus.Cancelled;
+    }
+}

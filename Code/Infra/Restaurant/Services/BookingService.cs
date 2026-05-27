@@ -96,12 +96,16 @@ public class BookingService : IBookingService
             return new List<ReservationDto>();
 
         return await _db.Reservations
+            .Include(x => x.Customer)
             .Include(x => x.RestaurantTable)
             .Where(x => x.CustomerId == customer.Id)
             .OrderByDescending(x => x.DateTime)
             .Select(x => new ReservationDto
             {
                 Id = x.Id,
+                CustomerName = x.Customer != null
+                    ? x.Customer.FullName
+                    : string.Empty,
                 DateTime = x.DateTime,
                 PartySize = x.PartySize,
                 Status = x.Status,
@@ -110,6 +114,69 @@ public class BookingService : IBookingService
                     : null
             })
             .ToListAsync();
+    }
+
+    public async Task<List<ReservationDto>> GetAllReservationsAsync()
+    {
+        return await _db.Reservations
+            .AsNoTracking()
+            .Include(x => x.Customer)
+            .Include(x => x.RestaurantTable)
+            .OrderByDescending(x => x.DateTime)
+            .Select(x => new ReservationDto
+            {
+                Id = x.Id,
+                CustomerName = x.Customer != null
+                    ? x.Customer.FullName
+                    : string.Empty,
+                DateTime = x.DateTime,
+                PartySize = x.PartySize,
+                Status = x.Status,
+                TableNumber = x.RestaurantTable != null
+                    ? x.RestaurantTable.TableNumber
+                    : null
+            })
+            .ToListAsync();
+    }
+
+    public async Task UpdateReservationAsync(Guid reservationId, UpdateReservationDto dto)
+    {
+        if (reservationId == Guid.Empty)
+            throw new InvalidOperationException("Reservation is required.");
+
+        var customerName = dto.CustomerName.Trim();
+
+        if (string.IsNullOrWhiteSpace(customerName))
+            throw new InvalidOperationException("Customer name is required.");
+
+        if (dto.DateTime <= DateTime.Now)
+            throw new InvalidOperationException("Reservation date must be in the future.");
+
+        var reservation = await _db.Reservations
+            .Include(x => x.Customer)
+            .FirstOrDefaultAsync(x => x.Id == reservationId);
+
+        if (reservation is null)
+            throw new InvalidOperationException("Reservation not found.");
+
+        var customer = await _db.Customers
+            .FirstOrDefaultAsync(x => x.FullName == customerName);
+
+        if (customer is null)
+        {
+            customer = new Customer
+            {
+                Id = Guid.NewGuid(),
+                FullName = customerName
+            };
+
+            _db.Customers.Add(customer);
+        }
+
+        reservation.CustomerId = customer.Id;
+        reservation.DateTime = dto.DateTime;
+
+        await _db.SaveChangesAsync();
     }
 
     public async Task CancelReservationAsync(Guid reservationId)
