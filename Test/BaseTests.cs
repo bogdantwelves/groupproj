@@ -15,4 +15,9 @@ public abstract class BaseTests<T> where T : class, new()
     {
         Assert.AreEqual(expected, actual);
     }
+
+    protected static void areSame(object? expected, object? actual)
+    {
+        Assert.AreSame(expected, actual);
+    }
 }
