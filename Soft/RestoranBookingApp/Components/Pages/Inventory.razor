@@ -7,12 +7,41 @@
 
 <h3>Inventory</h3>
 
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="alert alert-success">
+        @message
+    </div>
+}
+
 @if (!string.IsNullOrWhiteSpace(error))
 {
     <div class="alert alert-danger">
         @error
     </div>
 }
+
+<EditForm Model="newIngredient" OnValidSubmit="AddIngredientAsync" class="mb-4">
+    <DataAnnotationsValidator />
+
+    <div class="row g-3 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label">Product</label>
+            <InputText class="form-control" @bind-Value="newIngredient.Name" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Quantity</label>
+            <InputNumber class="form-control" @bind-Value="newIngredient.Quantity" />
+        </div>
+
+        <div class="col-md-3">
+            <button class="btn btn-primary w-100" type="submit" disabled="@isSubmitting">
+                Add Product
+            </button>
+        </div>
+    </div>
+</EditForm>
 
 @if (ingredients is null)
 {
@@ -49,9 +78,44 @@ else
 @code {
     private List<IngredientDto>? ingredients;
 
+    private CreateIngredientDto newIngredient = new();
+
+    private bool isSubmitting;
+
+    private string? message;
+
     private string? error;
 
     protected override async Task OnInitializedAsync()
+    {
+        await LoadIngredientsAsync();
+    }
+
+    private async Task AddIngredientAsync()
+    {
+        try
+        {
+            isSubmitting = true;
+            error = null;
+            message = null;
+
+            await InventoryService.AddIngredientAsync(newIngredient);
+            await LoadIngredientsAsync();
+
+            message = "Product added successfully.";
+            newIngredient = new CreateIngredientDto();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task LoadIngredientsAsync()
     {
         try
         {
