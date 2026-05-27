@@ -72,6 +72,7 @@ else
                 <th>Payment Method</th>
                 <th>Status</th>
                 <th>Created</th>
+                <th>Order Id</th>
             </tr>
         </thead>
         <tbody>
@@ -83,6 +84,7 @@ else
                     <td>@order.PaymentMethod</td>
                     <td>@order.PaymentState</td>
                     <td>@order.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@order.OrderId</td>
                 </tr>
             }
         </tbody>
