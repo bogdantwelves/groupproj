@@ -75,6 +75,24 @@ public class OrderService : IOrderService
         return order.Id;
     }
 
+    public async Task<decimal> GetOrderTotalAsync(Guid orderId)
+    {
+        if (orderId == Guid.Empty)
+            throw new InvalidOperationException("Order is required.");
+
+        var orderExists = await _db.Orders.AnyAsync(x => x.Id == orderId);
+        if (!orderExists)
+            throw new InvalidOperationException("Order not found.");
+
+        var total = await _db.OrderItems
+            .AsNoTracking()
+            .Where(x => x.OrderId == orderId)
+            .Select(x => (decimal?)(x.UnitPrice * x.Quantity))
+            .SumAsync();
+
+        return total ?? 0m;
+    }
+
     public async Task<int> GetOrderCountAsync()
     {
         return await _db.Orders.CountAsync();

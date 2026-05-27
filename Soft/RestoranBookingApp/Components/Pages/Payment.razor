@@ -5,6 +5,7 @@
 @using Domain.Restaurant.Interfaces
 
 @inject IPaymentService PaymentService
+@inject IOrderService OrderService
 
 <h3>Payment</h3>
 
@@ -17,7 +18,7 @@
 
 <div class="mb-3">
     <label class="form-label">Order Id</label>
-    <input class="form-control" @bind="orderIdText" />
+    <input class="form-control" @bind="OrderIdText" />
 </div>
 
 <div class="mb-3">
@@ -29,18 +30,48 @@
     </select>
 </div>
 
-<button class="btn btn-primary" @onclick="PayAsync">
+<button class="btn btn-outline-secondary" @onclick="ConfirmOrderAsync">
+    Confirm
+</button>
+
+<button class="btn btn-primary ms-2" @onclick="PayAsync" disabled="@(!isConfirmed)">
     Pay
 </button>
 
+@if (isConfirmed)
+{
+    <div class="mt-3 d-flex justify-content-end fw-semibold">
+        <div>Total order price: @confirmedTotal.ToString("0.00") €</div>
+    </div>
+}
+
 @code {
     private string orderIdText = string.Empty;
+
+    private string OrderIdText
+    {
+        get => orderIdText;
+        set
+        {
+            if (orderIdText == value)
+                return;
+
+            orderIdText = value;
+            isConfirmed = false;
+            confirmedOrderId = null;
+            confirmedTotal = 0m;
+        }
+    }
 
     private PaymentMethod selectedMethod = PaymentMethod.Card;
 
     private string? message;
 
-    private async Task PayAsync()
+    private bool isConfirmed;
+    private Guid? confirmedOrderId;
+    private decimal confirmedTotal;
+
+    private async Task ConfirmOrderAsync()
     {
         try
         {
@@ -52,9 +83,31 @@
                 return;
             }
 
+            confirmedTotal = await OrderService.GetOrderTotalAsync(orderId);
+            confirmedOrderId = orderId;
+            isConfirmed = true;
+        }
+        catch (Exception ex)
+        {
+            message = ex.InnerException?.Message ?? ex.Message;
+        }
+    }
+
+    private async Task PayAsync()
+    {
+        try
+        {
+            message = null;
+
+            if (!isConfirmed || confirmedOrderId is null)
+            {
+                message = "Please confirm the Order Id first.";
+                return;
+            }
+
             var dto = new PaymentDto
             {
-                OrderId = orderId,
+                OrderId = confirmedOrderId.Value,
                 Method = selectedMethod
             };
 
@@ -62,12 +115,15 @@
 
             message = "Payment completed successfully.";
 
-            orderIdText = string.Empty;
+            OrderIdText = string.Empty;
             selectedMethod = PaymentMethod.Card;
+            isConfirmed = false;
+            confirmedOrderId = null;
+            confirmedTotal = 0m;
         }
         catch (Exception ex)
         {
-            message = ex.Message;
+            message = ex.InnerException?.Message ?? ex.Message;
         }
     }
 }
