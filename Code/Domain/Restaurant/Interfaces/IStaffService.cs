@@ -8,6 +8,8 @@ public interface IStaffService
 {
     Task<List<StaffDto>> GetStaffAsync();
 
+    Task<Guid> CreateStaffAsync(CreateStaffDto dto);
+
     Task UpdateStaffAsync(Guid staffId, UpdateStaffDto dto);
 
     Task DeleteStaffAsync(Guid staffId);
