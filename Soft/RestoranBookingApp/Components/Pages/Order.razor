@@ -87,6 +87,10 @@ else
                 }
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-end fw-semibold">
+            <div>Total: @GetSelectedItemsTotal().ToString("0.00") €</div>
+        </div>
     }
 
     <button class="btn btn-success" @onclick="CreateOrderAsync">
@@ -102,6 +106,18 @@ else
     private string customerIdText = string.Empty;
 
     private string? message;
+
+    private decimal GetSelectedItemsTotal()
+    {
+        if (menuItems is null || selectedItems.Count == 0)
+            return 0m;
+
+        return selectedItems.Sum(selected =>
+        {
+            var price = menuItems.FirstOrDefault(x => x.Id == selected.MenuItemId)?.Price ?? 0m;
+            return price * selected.Quantity;
+        });
+    }
 
     protected override async Task OnInitializedAsync()
     {
