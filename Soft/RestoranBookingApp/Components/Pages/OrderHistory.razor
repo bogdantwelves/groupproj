@@ -1,0 +1,68 @@
+@page "/restaurant/order-history"
+
+@using Data.Restaurant.DTOs
+@using Domain.Restaurant.Interfaces
+
+@inject IOrderService OrderService
+
+<h3>Order History</h3>
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">
+        @error
+    </div>
+}
+
+@if (orders is null)
+{
+    <p>Loading...</p>
+}
+else if (orders.Count == 0)
+{
+    <p>No orders found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Payment Method</th>
+                <th>Status</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.CustomerName</td>
+                    <td>@order.TotalAmount.ToString("0.00") €</td>
+                    <td>@order.PaymentMethod</td>
+                    <td>@order.PaymentState</td>
+                    <td>@order.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<OrderHistoryDto>? orders;
+
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await OrderService.GetOrderHistoryAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}

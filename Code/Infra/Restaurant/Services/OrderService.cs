@@ -1,5 +1,6 @@
 using Data.Restaurant.DTOs;
 using Data.Restaurant.Entities;
+using Data.Restaurant.Enums;
 using Domain.Restaurant.Interfaces;
 using Infra.Restaurant.Data;
 using Microsoft.EntityFrameworkCore;
@@ -77,5 +78,30 @@ public class OrderService : IOrderService
     public async Task<int> GetOrderCountAsync()
     {
         return await _db.Orders.CountAsync();
+    }
+
+    public async Task<List<OrderHistoryDto>> GetOrderHistoryAsync()
+    {
+        return await _db.Orders
+            .Include(x => x.Customer)
+            .Include(x => x.Items)
+            .Include(x => x.Payment)
+            .OrderByDescending(x => x.CreatedAt)
+            .Select(x => new OrderHistoryDto
+            {
+                OrderId = x.Id,
+                CustomerName = x.Customer != null
+                    ? x.Customer.FullName
+                    : "Unknown",
+                TotalAmount = x.Items.Sum(i => i.UnitPrice * i.Quantity),
+                PaymentMethod = x.Payment != null
+                    ? x.Payment.Method.ToString()
+                    : "-",
+                PaymentState = x.Payment != null && x.Payment.Status == PaymentStatus.Paid
+                    ? "Paid"
+                    : "Unpaid",
+                CreatedAt = x.CreatedAt
+            })
+            .ToListAsync();
     }
 }

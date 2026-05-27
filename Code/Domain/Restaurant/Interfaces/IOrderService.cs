@@ -6,4 +6,6 @@ public interface IOrderService
     Task<Guid> CreateOrderAsync(CreateOrderDto dto);
 
     Task<int> GetOrderCountAsync();
+
+    Task<List<OrderHistoryDto>> GetOrderHistoryAsync();
 }
