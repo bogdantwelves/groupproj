@@ -18,11 +18,15 @@ public class BookingService : IBookingService
 
     public async Task CreateReservationAsync(CreateReservationDto dto)
     {
-        if (dto.CustomerId == Guid.Empty)
-            throw new InvalidOperationException("Customer is required.");
+        var customerName = dto.CustomerName.Trim();
 
-        if (dto.RestaurantId == Guid.Empty)
-            throw new InvalidOperationException("Restaurant is required.");
+        if (string.IsNullOrWhiteSpace(customerName))
+            throw new InvalidOperationException("Customer name is required.");
+
+        var restaurantName = dto.RestaurantName.Trim();
+
+        if (string.IsNullOrWhiteSpace(restaurantName))
+            throw new InvalidOperationException("Restaurant name is required.");
 
         if (dto.PartySize <= 0)
             throw new InvalidOperationException("Party size must be greater than zero.");
@@ -30,19 +34,29 @@ public class BookingService : IBookingService
         if (dto.DateTime <= DateTime.Now)
             throw new InvalidOperationException("Reservation date must be in the future.");
 
-        var customerExists = await _db.Customers.AnyAsync(x => x.Id == dto.CustomerId);
+        var customer = await _db.Customers
+            .FirstOrDefaultAsync(x => x.FullName == customerName);
 
-        if (!customerExists)
-            throw new InvalidOperationException("Customer not found.");
+        if (customer is null)
+        {
+            customer = new Customer
+            {
+                Id = Guid.NewGuid(),
+                FullName = customerName
+            };
 
-        var restaurantExists = await _db.Restaurants.AnyAsync(x => x.Id == dto.RestaurantId);
+            _db.Customers.Add(customer);
+        }
 
-        if (!restaurantExists)
+        var restaurant = await _db.Restaurants
+            .FirstOrDefaultAsync(x => x.Name == restaurantName);
+
+        if (restaurant is null)
             throw new InvalidOperationException("Restaurant not found.");
 
         var table = await _db.Tables
             .Where(x =>
-                x.RestaurantId == dto.RestaurantId &&
+                x.RestaurantId == restaurant.Id &&
                 x.IsAvailable &&
                 x.Capacity >= dto.PartySize)
             .OrderBy(x => x.Capacity)
@@ -51,8 +65,8 @@ public class BookingService : IBookingService
         var reservation = new Reservation
         {
             Id = Guid.NewGuid(),
-            CustomerId = dto.CustomerId,
-            RestaurantId = dto.RestaurantId,
+            CustomerId = customer.Id,
+            RestaurantId = restaurant.Id,
             DateTime = dto.DateTime,
             PartySize = dto.PartySize,
             Status = table is null ? ReservationStatus.Pending : ReservationStatus.Confirmed,
@@ -67,14 +81,23 @@ public class BookingService : IBookingService
         await _db.SaveChangesAsync();
     }
 
-    public async Task<List<ReservationDto>> GetReservationsByCustomerAsync(Guid customerId)
+    public async Task<List<ReservationDto>> GetReservationsByCustomerAsync(string customerName)
     {
-        if (customerId == Guid.Empty)
-            throw new InvalidOperationException("Customer is required.");
+        var normalizedCustomerName = customerName.Trim();
+
+        if (string.IsNullOrWhiteSpace(normalizedCustomerName))
+            throw new InvalidOperationException("Customer name is required.");
+
+        var customer = await _db.Customers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.FullName == normalizedCustomerName);
+
+        if (customer is null)
+            return new List<ReservationDto>();
 
         return await _db.Reservations
             .Include(x => x.RestaurantTable)
-            .Where(x => x.CustomerId == customerId)
+            .Where(x => x.CustomerId == customer.Id)
             .OrderByDescending(x => x.DateTime)
             .Select(x => new ReservationDto
             {

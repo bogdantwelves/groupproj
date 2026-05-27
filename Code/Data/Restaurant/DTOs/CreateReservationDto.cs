@@ -2,9 +2,9 @@ namespace Data.Restaurant.DTOs;
 
 public class CreateReservationDto
 {
-    public Guid CustomerId { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
 
-    public Guid RestaurantId { get; set; }
+    public string RestaurantName { get; set; } = string.Empty;
 
     public DateTime DateTime { get; set; }
 

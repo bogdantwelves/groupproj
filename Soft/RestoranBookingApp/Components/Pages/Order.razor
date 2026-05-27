@@ -16,8 +16,8 @@
 }
 
 <div class="mb-3">
-    <label class="form-label">Customer Id</label>
-    <input class="form-control" @bind="customerIdText" />
+    <label class="form-label">Customer Name</label>
+    <input class="form-control" @bind="customerNameText" />
 </div>
 
 @if (menuItems is null)
@@ -103,7 +103,7 @@ else
 
     private List<CreateOrderItemDto> selectedItems = new();
 
-    private string customerIdText = string.Empty;
+    private string customerNameText = string.Empty;
 
     private string? message;
 
@@ -154,15 +154,9 @@ else
         {
             message = null;
 
-            if (!Guid.TryParse(customerIdText, out var customerId))
-            {
-                message = "Invalid Customer Id.";
-                return;
-            }
-
             var dto = new CreateOrderDto
             {
-                CustomerId = customerId,
+                CustomerName = customerNameText,
                 Items = selectedItems
             };
 

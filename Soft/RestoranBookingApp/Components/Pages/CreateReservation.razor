@@ -18,18 +18,28 @@
     <DataAnnotationsValidator />
 
     <div class="mb-3">
-        <label class="form-label">Customer Id</label>
-        <InputText class="form-control" @bind-Value="customerIdText" />
+        <label class="form-label">Customer Name</label>
+        <InputText class="form-control" @bind-Value="model.CustomerName" />
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Restaurant Id</label>
-        <InputText class="form-control" @bind-Value="restaurantIdText" />
+        <label class="form-label">Restaurant Name</label>
+        <InputText class="form-control" @bind-Value="model.RestaurantName" />
     </div>
 
     <div class="mb-3">
         <label class="form-label">Date</label>
         <InputDate class="form-control" @bind-Value="reservationDate" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Time</label>
+        <InputSelect class="form-select" @bind-Value="reservationTimeText">
+            @foreach (var timeOption in TimeOptions)
+            {
+                <option value="@timeOption">@timeOption</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="mb-3">
@@ -48,33 +58,28 @@
         PartySize = 2
     };
 
-    private string customerIdText = string.Empty;
-
-    private string restaurantIdText = string.Empty;
-
     private DateTime reservationDate = DateTime.Today.AddDays(1);
 
+    private string reservationTimeText = "19:00";
+
     private string? message;
+
+    private static readonly string[] TimeOptions = Enumerable
+        .Range(0, 25)
+        .Select(x => TimeOnly.FromTimeSpan(TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(x * 30))).ToString("HH:mm"))
+        .ToArray();
 
     private async Task SubmitAsync()
     {
         try
         {
-            if (!Guid.TryParse(customerIdText, out var customerId))
+            if (!TimeSpan.TryParse(reservationTimeText, out var reservationTime))
             {
-                message = "Invalid Customer Id.";
+                message = "Invalid reservation time.";
                 return;
             }
 
-            if (!Guid.TryParse(restaurantIdText, out var restaurantId))
-            {
-                message = "Invalid Restaurant Id.";
-                return;
-            }
-
-            model.CustomerId = customerId;
-            model.RestaurantId = restaurantId;
-            model.DateTime = reservationDate;
+            model.DateTime = reservationDate.Date.Add(reservationTime);
 
             await BookingService.CreateReservationAsync(model);
 
@@ -85,9 +90,8 @@
                 PartySize = 2
             };
 
-            customerIdText = string.Empty;
-            restaurantIdText = string.Empty;
             reservationDate = DateTime.Today.AddDays(1);
+            reservationTimeText = "19:00";
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@ namespace Data.Restaurant.DTOs;
 
 public class CreateOrderDto
 {
-    public Guid CustomerId { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
 
     public Guid? ReservationId { get; set; }
 

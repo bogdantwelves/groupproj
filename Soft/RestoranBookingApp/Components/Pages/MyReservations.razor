@@ -16,8 +16,8 @@
 }
 
 <div class="mb-3">
-    <label class="form-label">Customer Id</label>
-    <input class="form-control" @bind="customerIdText" />
+    <label class="form-label">Customer Name</label>
+    <input class="form-control" @bind="customerNameText" />
 </div>
 
 <button class="btn btn-primary mb-3" @onclick="LoadReservationsAsync">
@@ -70,7 +70,7 @@ else if (reservations is not null)
 }
 
 @code {
-    private string customerIdText = string.Empty;
+    private string customerNameText = string.Empty;
 
     private List<ReservationDto>? reservations;
 
@@ -85,14 +85,7 @@ else if (reservations is not null)
             message = null;
             isLoading = true;
 
-            if (!Guid.TryParse(customerIdText, out var customerId))
-            {
-                message = "Invalid Customer Id.";
-                reservations = null;
-                return;
-            }
-
-            reservations = await BookingService.GetReservationsByCustomerAsync(customerId);
+            reservations = await BookingService.GetReservationsByCustomerAsync(customerNameText);
 
             if (reservations.Count == 0)
             {

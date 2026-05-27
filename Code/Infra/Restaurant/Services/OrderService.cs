@@ -18,12 +18,24 @@ public class OrderService : IOrderService
 
     public async Task<Guid> CreateOrderAsync(CreateOrderDto dto)
     {
-        if (dto.CustomerId == Guid.Empty)
-            throw new InvalidOperationException("Customer is required.");
+        var customerName = dto.CustomerName.Trim();
 
-        var customerExists = await _db.Customers.AnyAsync(x => x.Id == dto.CustomerId);
-        if (!customerExists)
-            throw new InvalidOperationException("Customer not found.");
+        if (string.IsNullOrWhiteSpace(customerName))
+            throw new InvalidOperationException("Customer name is required.");
+
+        var customer = await _db.Customers
+            .FirstOrDefaultAsync(x => x.FullName == customerName);
+
+        if (customer is null)
+        {
+            customer = new Customer
+            {
+                Id = Guid.NewGuid(),
+                FullName = customerName
+            };
+
+            _db.Customers.Add(customer);
+        }
 
         if (dto.ReservationId is not null)
         {
@@ -44,7 +56,7 @@ public class OrderService : IOrderService
         var order = new Order
         {
             Id = Guid.NewGuid(),
-            CustomerId = dto.CustomerId,
+            CustomerId = customer.Id,
             ReservationId = dto.ReservationId,
             CreatedAt = DateTime.UtcNow
         };
