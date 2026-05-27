@@ -22,31 +22,48 @@ else if (dashboard is not null)
 {
     <div class="row g-3">
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Reservations</h5>
-                <p class="fs-4">@dashboard.ReservationCount</p>
-            </div>
+            <NavLink class="text-decoration-none text-reset d-block" href="/restaurant/reservations">
+                <div class="card p-3">
+                    <h5>Reservations</h5>
+                    <p class="fs-4">@dashboard.ReservationCount</p>
+                </div>
+            </NavLink>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Orders</h5>
-                <p class="fs-4">@dashboard.OrderCount</p>
-            </div>
+            <NavLink class="text-decoration-none text-reset d-block" href="/restaurant/order-history">
+                <div class="card p-3">
+                    <h5>Orders</h5>
+                    <p class="fs-4">@dashboard.OrderCount</p>
+                </div>
+            </NavLink>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Available Tables</h5>
-                <p class="fs-4">@dashboard.AvailableTables</p>
-            </div>
+            <NavLink class="text-decoration-none text-reset d-block" href="/restaurant/tables">
+                <div class="card p-3">
+                    <h5>Available Tables</h5>
+                    <p class="fs-4">@dashboard.AvailableTables</p>
+                </div>
+            </NavLink>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3">
-                <h5>Low Stock Ingredients</h5>
-                <p class="fs-4">@dashboard.LowStockIngredients</p>
-            </div>
+            <NavLink class="text-decoration-none text-reset d-block" href="/restaurant/inventory">
+                <div class="card p-3">
+                    <h5>Low Stock Ingredients</h5>
+                    <p class="fs-4">@dashboard.LowStockIngredients</p>
+                </div>
+            </NavLink>
+        </div>
+
+        <div class="col-md-3">
+            <NavLink class="text-decoration-none text-reset d-block" href="/restaurant/staff">
+                <div class="card p-3">
+                    <h5>Staff</h5>
+                    <p class="fs-4">Manage</p>
+                </div>
+            </NavLink>
         </div>
     </div>
 
