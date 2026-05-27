@@ -1,0 +1,61 @@
+@page "/restaurant/staff"
+
+@using Data.Restaurant.DTOs
+@using Domain.Restaurant.Interfaces
+
+@inject IStaffService StaffService
+
+<h3>Staff</h3>
+
+@if (!string.IsNullOrWhiteSpace(error))
+{
+    <div class="alert alert-danger">
+        @error
+    </div>
+}
+
+@if (staffList is null)
+{
+    <p>Loading...</p>
+}
+else if (staffList.Count == 0)
+{
+    <p>No staff found.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var staff in staffList)
+            {
+                <tr>
+                    <td>@staff.FullName</td>
+                    <td>@staff.Role</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<StaffDto>? staffList;
+    private string? error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            staffList = await StaffService.GetStaffAsync();
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}
